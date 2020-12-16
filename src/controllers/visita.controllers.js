@@ -143,7 +143,7 @@ module.exports = {
     });
 
     
-    await usuarioModel.findById(usuarioarrendatario, async(err, usuarioEncontrado) => {
+    await usuarioModel.findById(usuarioarrendatario, (err, usuarioEncontrado) => {
 
       if (err) {
         return res.status(500).json({
@@ -169,7 +169,7 @@ module.exports = {
         });
       }
 
-      await visita.save((err, visitaGuardado) => {
+       visita.save((err, visitaGuardado) => {
         if (err) {
           return res.status(400).json({
             ok: false,

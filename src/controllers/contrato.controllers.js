@@ -195,9 +195,9 @@ module.exports = {
     });
     
 
-     await contrato.save(async (err, contratoGuardado) => {
+      contrato.save(async (err, contratoGuardado) => {
 
-      await inmuebleModel.findById(inmueble, async (err, inmueble) => {
+      await inmuebleModel.findById(inmueble,  (err, inmuebleEncontrado) => {
         if (err) {
           return res.status(500).json({
             ok: false,
@@ -206,17 +206,17 @@ module.exports = {
           });
         }
 
-        if (!inmueble) {
+        if (!inmuebleEncontrado) {
           return res.status(400).json({
             ok: false,
             mensaje: "El inmueble con el id: " + id + " no existe",
             errors: { message: "No existe un inmueble con ese ID" },
           });
         }
-        inmueble.publicado = 'PRIVADO';
-        inmueble.estado = 'OCUPADO';
+        inmuebleEncontrado.publicado = 'PRIVADO';
+        inmuebleEncontrado.estado = 'OCUPADO';
 
-        await inmueble.save((err, inmuebleGuardado) => {
+        inmuebleEncontrado.save((err, inmuebleGuardado) => {
 
 
           if (err) {

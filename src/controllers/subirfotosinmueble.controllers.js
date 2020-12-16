@@ -92,7 +92,7 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
 
 
 
-      await inmueble.save((err, inmuebleGuardado) => {
+      inmueble.save((err, inmuebleGuardado) => {
         if (err) {
           return res.status(400).json({
             ok: false,

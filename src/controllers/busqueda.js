@@ -93,7 +93,8 @@ module.exports= {
         
         if(rol == 'ARRENDADOR'){
           console.log('hola '+ rol)
-          inmuebleModel.find({ nombre: expresionRegular, usuario: auth})
+          inmuebleModel.find({ usuario: { $in: auth}})
+          .or([{ estado: expresionRegular }, { nombre: expresionRegular }])
           .populate("usuario", "nombre apellido correo _id")
           .exec((err, inmuebles) => {
             console.log(inmuebles)
@@ -104,11 +105,14 @@ module.exports= {
             }
           });
         }
-        if(rol == 'ADMINISTRADOR'){
+        if(rol == 'ARRENDATARIO'){
           console.log('hola '+ rol)
 
-          console.log('adm')
-          inmuebleModel.find({ nombre: expresionRegular})
+          console.log('arrendatario')
+          inmuebleModel.find({$and: [
+            { nombre: { $in: expresionRegular } },
+            { estado: { $in: 'DISPONIBLE' } },
+          ]})
           .populate("usuario", "nombre apellido correo")
           .exec((err, inmuebles) => {
             if (err) {

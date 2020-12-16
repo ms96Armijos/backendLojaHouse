@@ -233,7 +233,7 @@ module.exports = {
     const { estado } = req.body;
 
 
-    await inmuebleModel.findById(id, async (err, inmueble) => {
+    await inmuebleModel.findById(id, async(err, inmueble) => {
       if (err) {
         return res.status(500).json({
           ok: false,
@@ -253,7 +253,7 @@ module.exports = {
       inmueble.estado = estado;
 
 
-      await inmueble.save((err, inmuebleGuardado) => {
+       inmueble.save((err, inmuebleGuardado) => {
         if (err) {
           return res.status(400).json({
             ok: false,
@@ -276,7 +276,7 @@ module.exports = {
     const { estado, publicado } = req.body;
     
 
-    await inmuebleModel.findById(id, async (err, inmueble) => {
+    await inmuebleModel.findById(id,  (err, inmueble) => {
       if (err) {
         return res.status(500).json({
           ok: false,
@@ -297,7 +297,7 @@ module.exports = {
       inmueble.estado = estado;
 
 
-      await inmueble.save((err, inmuebleGuardado) => {
+       inmueble.save((err, inmuebleGuardado) => {
         if (err) {
           return res.status(400).json({
             ok: false,

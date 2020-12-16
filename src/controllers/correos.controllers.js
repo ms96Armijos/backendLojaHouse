@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const XOAuth2 = require('xoauth2');
 
 //cuando me da error de registrarme en la pagina de OAuth debo ir a consola de google y publicar la aplicacion
 
@@ -6,37 +7,36 @@ module.exports = {
   sendEmail: (data, callback) => {
     //DESDE AQÍ EMPIEZA LA GENERACIÓN DE LA CONTRASEÑA Y EL ENVÍO DEL CORREO ELECTRÓNICO
     let transporter = nodemailer.createTransport({
-      service: "gmail",
-      port:465,
-      secure: true,
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false, // true for 587, false for other ports
+      requireTLS: true,
       // requireTLS: true,
-      XOAuth2: {
+      auth: {XOAuth2: XOAuth2.createXOAuth2Generator({
         user: "corp.lojahouse@gmail.com", // Your gmail address. // Not @developer.gserviceaccount.com
         clientId:
           "1024007464269-9p1h8g9kh2rs29aehgis9osp2d4r5sq4.apps.googleusercontent.com",
-        clientSecret: "fNtt9V8h5R9ALjI857hT6Nrp",
+        clientSecret: "Tsl0qj2FlEw-aExfhKlwAfe7",
         refreshToken:
-          "L9IrOQCPLWz7geEnT97EyuNpRJrRwmsnKpZ1x5q_B7BBQDoWmQO7auqt9Rez7uzjtPE6n9o",
-      },
-      /* auth: {
-     type: "login",
-     user: "corp.lojahouse@gmail.com",
-     pass: "#$corporacioneslaness#$",
+          "1//04iDs1eYdWmgqCgYIARAAGAQSNwF-L9IrT_2ovew6gWyHlTafvmnuRa06dOInFXLEdd9WqICQPc7JG0UJTjCR7kTGhwcJjQK_jP4",
+        accessToken:"ya29.a0AfH6SMBvMXtznbi-yb3qLS_dspngXqaieGfeT62M5iA_KXcJlZCixvGBoNnt_lJHlNyO8Ug88geCDqN2PXVnoYAETdJavCQs8Wl71SN0IEXiZ7z-y3jUMO-CuFYMzqgnARTzL0tXD8KLEGUAipELMxTVe77j_n-hyrY2E9YVfjA",
+      })},
+       /*auth: {
+     user: "testplagios@gmail.com",
+     pass: "plagios123",
    },*/
       debug: true, // show debug output
       logger: true, // log information in console
-      tls: {
-        // do not fail on invalid certs
-        rejectUnauthorized: false,
-      },
+ 
+   
     });
     const mailOptions = {
-      from: "corp.lojahouse@gmail.com",
-      to: "tiviarmijos@gmail.com",
+      from: "Tivi <corp.lojahouse@gmail.com>",
+      to: "testplagios@gmail.com",
       subject: "Hola",
-      text: "data.htmlMessage",
+      text: "data.fgdfgdfg",
     };
-    transporter.sendMail(mailOptions, (err) => {
+    transporter.sendMail(mailOptions, function(err){
       if (err) {
         return console.error(err);
       }
