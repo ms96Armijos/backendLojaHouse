@@ -32,6 +32,8 @@ const rutaContrato = require('./src/routes/contrato.routes');
 const rutaLogin = require('./src/routes/login.routes');
 const rutaImagenes = require('./src/routes/imagenes.routes');
 const rutaBusqueda = require('./src/routes/busqueda.routes');
+const rutaRenovarToken = require('./src/routes/renovarToken.routes');
+const rutaMensaje = require('./src/routes/mensaje.routes');
 
 
 
@@ -57,6 +59,9 @@ app.use('/contrato', rutaContrato);
 app.use('/login', rutaLogin);
 app.use('/img', rutaImagenes);
 app.use('/busqueda', rutaBusqueda);
+
+app.use('/renovar', rutaRenovarToken);
+app.use('/mensaje', rutaMensaje);
 
 //RUTAS ADMINISTRADOR-ARRENDADOR
 app.use('/admin/inmueble', rutaInmueblesAdminArrendador);

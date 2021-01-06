@@ -211,7 +211,7 @@ module.exports = {
       });
     }
 
-    await visitaModel.findById(id, async (err, visita) => {
+    await visitaModel.findById(id, (err, visita) => {
       if (err) {
         return res.status(500).json({
           ok: false,
@@ -233,7 +233,7 @@ module.exports = {
       visita.estado = estado;
 
 
-      await visita.save((err, visitaGuardado) => {
+     visita.save((err, visitaGuardado) => {
         if (err) {
           return res.status(400).json({
             ok: false,

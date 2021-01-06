@@ -25,7 +25,10 @@ let inmuebleSchema = new Schema({
     garantia: { type: Number },
     estado: { type: String, default: 'DISPONIBLE', enum: estadosValidos },
     publicado: { type: String, default: 'PRIVADO', enum: publicadoValidos },
-    usuario: { type: Schema.Types.ObjectId, ref: 'Usuario' }
+    usuario: { type: Schema.Types.ObjectId, ref: 'Usuario' },
+    barrio: { type: String, required: [true, 'El barrio del inmueble es necesario'] },
+    ciudad: { type: String, required: [true, 'La ciudad del inmueble es necesaria'] },
+    provincia: { type: String, required: [true, 'La provincia de inmueble es necesaria'] },
 }, { timestamps: true, versionKey: false }, { collection: 'inmuebles'});
 
 module.exports = mongoose.model('Inmueble', inmuebleSchema);

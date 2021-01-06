@@ -65,7 +65,7 @@ module.exports = {
           if (err) {
             return res.status(500).json({
               ok: false,
-              mensaje: "Error contando usuarios",
+              mensaje: "Error contando inmuebles",
               errors: err,
             });
           }
@@ -141,7 +141,20 @@ module.exports = {
 
   crearInmueble: async (req, res) => {
 
-    const { nombre, descripcion, direccion, codigo, tipo, servicio, precioalquiler, garantia, estado, publicado, usuario } = req.body;
+    const { nombre,
+       descripcion, 
+       direccion, 
+       codigo, 
+       tipo, 
+       servicio, 
+       precioalquiler, 
+       garantia, 
+       estado, 
+       publicado, 
+       usuario,
+       barrio,
+       ciudad,
+       provincia } = req.body;
 
     console.log(req.usuario._id)
     let inmueble = new inmuebleModel({
@@ -155,8 +168,10 @@ module.exports = {
       garantia,
       estado,
       publicado,
-      usuario
-
+      usuario, 
+      barrio,
+      ciudad, 
+      provincia
     });
     console.log(inmueble)
 
@@ -181,9 +196,21 @@ module.exports = {
   actualizarInmueble: async (req, res) => {
     let id = req.params.id;
 
-    const { nombre, descripcion, direccion, codigo, tipo, servicio, precioalquiler, garantia, usuario } = req.body;
+    const { nombre, 
+      descripcion, 
+      direccion, 
+      codigo, 
+      tipo, 
+      servicio, 
+      precioalquiler, 
+      garantia, 
+      usuario,
+      barrio,
+      ciudad,
+      provincia 
+    } = req.body;
 
-    await inmuebleModel.findById(id, async (err, inmueble) => {
+    await inmuebleModel.findById(id, (err, inmueble) => {
       if (err) {
         return res.status(500).json({
           ok: false,
@@ -208,9 +235,12 @@ module.exports = {
       inmueble.servicio = servicio;
       inmueble.precioalquiler = precioalquiler;
       inmueble.garantia = garantia;
+      inmueble.barrio = barrio;
+      inmueble.ciudad = ciudad;
+      inmueble.provincia = provincia;
 
 
-      await inmueble.save((err, inmuebleGuardado) => {
+      inmueble.save((err, inmuebleGuardado) => {
         if (err) {
           return res.status(400).json({
             ok: false,

@@ -76,8 +76,7 @@ module.exports = {
     
             //CREANDO UN TOKEN
     
-            let tokenUsuario = jwt.sign({usuario: payload}, SEMILLA, {expiresIn: 28800}); //DURACION DE 28800 = 8 HORAS EL TOKEN
-    
+            let tokenUsuario = jwt.sign({usuario: payload}, SEMILLA, {expiresIn: '12h'}); //DURACION DE 28800 = 8 HORAS EL TOKEN
             res.status(200).json({
                 ok: true,
                 mensaje: 'Login correcto',
@@ -88,7 +87,6 @@ module.exports = {
         });
     }
 }
-
 
 function obtenerMenu(ROL){
 

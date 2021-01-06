@@ -32,7 +32,7 @@ router.put('/desactivarinmueble/:id', mdwVerificarToken.verificaToken, desactiva
 router.get('/publicados/arrendador/:desde', mdwVerificarToken.verificaToken, inmueblesPublicadosPorArrendador);
 
 //RUTA PÚBLICA
-router.get('/inmueblespublicos/:desde', inmueblesPublicos);
+router.get('/inmueblespublicos/:desde',  inmueblesPublicos);
 router.get('/inmuebles/publicos/movil', inmueblesPublicosMovil);
 
 //RUTA DEL ARRENDADOR

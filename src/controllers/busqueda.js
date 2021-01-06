@@ -84,7 +84,46 @@ module.exports= {
           .catch((err)=>{
             console.log(err)
           });
-      }
+      },
+
+
+      busquedaAnidada: (req, res) => {
+        let tabla = req.params.tabla;
+
+        let termminoUbicacion = req.params.ubicacion;
+        let termminoTipoInmueble = req.params.tipo;
+        let termminoPrecio = req.params.precio;
+
+        console.log(termminoPrecio);
+
+        let primerPrecio = termminoPrecio.split('-')[0];
+        let segundoPrecio = termminoPrecio.split('-')[1];
+
+        let expresionRegularUbicacion = new RegExp(termminoUbicacion, "i");
+        let expresionRegularTipoInmueble = new RegExp(termminoTipoInmueble, "i");
+
+        let promesa;
+      
+        switch (tabla) {
+          case "inmuebles":
+            promesa = buscarInmueblesPrincipal(expresionRegularTipoInmueble, expresionRegularUbicacion, primerPrecio, segundoPrecio);
+            break;
+
+          default:
+            return res.status(400).json({
+              ok: false,
+              mensaje: "Los tipos de búsqueda son: usuarios, visitas, inmuebles, servicios",
+              error: { message: "Tipo de colección no válida" },
+            });
+        }
+      
+        promesa.then((data) => {
+          res.status(200).json({
+            ok: true,
+            [tabla]: data,
+          });
+        });
+      },
 
     }
     
@@ -202,7 +241,6 @@ module.exports= {
       });
     }
 
-
     function buscarContratosArrendatario(busqueda, expresionRegular, auth) {
       return new Promise((resolve, reject) => {
         contratoModel.find({nombrecontrato: expresionRegular, usuarioarrendatario: auth})
@@ -216,6 +254,32 @@ module.exports= {
       });
     }
 
+
+    function buscarInmueblesPrincipal(expresionRegularTipoInmueble, expresionRegularUbicacion, primerPrecio, segundoPrecio) {
+
+      //console.log(expresionRegularPrecio)
+     
+
+      return new Promise((resolve, reject) => {
+      
+
+          inmuebleModel.find({})
+          .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio , $lte : segundoPrecio} }])
+          .exec((err, inmuebles) => {
+            console.log(inmuebles)
+            console.log(inmuebles)
+            if (err) {
+              reject("Error al cargar Inmuebles", err);
+            } 
+            if(!inmuebles){
+              reject("No existen inmuebles", err);
+            }
+            else {
+              resolve(inmuebles);
+            }
+          });
+      });
+    }
 
     
 

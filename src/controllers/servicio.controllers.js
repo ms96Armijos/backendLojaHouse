@@ -39,10 +39,10 @@ module.exports = {
           });
       },
 
-    obtenerServicio: (req, res) => {
+    obtenerServicio: async(req, res) => {
         let id = req.params.id;
 
-        servicioModel.findById(id)
+        await servicioModel.findById(id)
           .exec((err, servicio) => {
             if (err) {
               return res.status(500).json({
@@ -85,7 +85,7 @@ module.exports = {
             nombre: nombre
           });
         
-         await servicio.save((err, servicioGuardado) => {
+        servicio.save((err, servicioGuardado) => {
             if (err) {
               return res.status(400).json({
                 ok: false,
@@ -107,8 +107,6 @@ module.exports = {
             mensaje: `Ya existe el servicio: ${nombre}`,
           });
         }
-
-       
       },
 
     actualizarServicios: async(req, res) => {

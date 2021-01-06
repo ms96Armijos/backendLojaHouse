@@ -34,6 +34,9 @@ exports.verificaToken = async function(req, res, next){
     } 
 }
 
+
+
+
 //VERIFICAR ROL
 exports.verificaRol = async function(req, res, next){
 
