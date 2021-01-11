@@ -14,6 +14,7 @@ const {
     inmueblesPublicos,
     inmueblesPublicosMovil,
     obtenerinmueblesarrendador,
+    eliminarInmuebleDesdeElAdministrador,
     actualizarFotosInmueble
 } = require('../controllers/inmueble.controllers')
 
@@ -37,4 +38,7 @@ router.get('/inmuebles/publicos/movil', inmueblesPublicosMovil);
 
 //RUTA DEL ARRENDADOR
 router.get('/obtenerinmuebles/arrendador/:desde', mdwVerificarToken.verificaToken, obtenerinmueblesarrendador);
+
+//ELIMINAR INMUEBLE DESDE EL ADMINISITRADOR
+router.delete('/eliminar-inmueble/admin/:id', mdwVerificarToken.verificaToken, eliminarInmuebleDesdeElAdministrador);
 module.exports = router;

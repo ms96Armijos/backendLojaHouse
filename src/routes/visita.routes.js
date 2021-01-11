@@ -35,5 +35,4 @@ router.get('/arrendatario/visitasolicitada/:desde', mdwVerificarToken.verificaTo
 router.get('/arrendatario/obtenervisita/:id', mdwVerificarToken.verificaToken, obtenerVisitaEspecificaArrendatario);
 router.get('/arrendador/obtenervisita/:id', mdwVerificarToken.verificaToken, obtenerVisitaEspecificaArrendador);
 
-
 module.exports = router;

@@ -133,9 +133,6 @@ function buscarVisitasArrendatario(busqueda, expresionRegular, auth, desde) {
   });
 }
 
-
-
-
 function buscarUsuariosArrendadores(busqueda, expresionRegular, desde) {
 
   return new Promise((resolve, reject) => {
@@ -217,3 +214,4 @@ function buscarContratosArrendatario(busqueda, expresionRegular, auth, desde) {
       });
   });
 }
+

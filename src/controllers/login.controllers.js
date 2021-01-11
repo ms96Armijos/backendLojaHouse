@@ -138,13 +138,23 @@ function obtenerMenu(ROL){
     ]
   };
 
+  let menuMensajes = {
+    titulo: 'Mensajes',
+    icono: 'mdi mdi-message',
+    submenu: [
+      //{ titulo: 'Usuarios', url: '/usuarios' },
+      { titulo: 'Mensajes', url: '/mensajes' }
+    ]
+  };
+
 
   var menu = [];
   
   if(ROL === 'ADMINISTRADOR'){
     menu[0] = Object(arrendadorAdministrador);
     menu[1] = Object(arrendatarioAdministrador);
-    menu[2] = Object(menu3);
+    menu[2] = Object(menuMensajes);
+    menu[3] = Object(menu3);
   }
   if(ROL === 'ARRENDADOR'){
     menu[0] = Object(menu1);

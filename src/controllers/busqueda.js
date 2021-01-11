@@ -1,7 +1,7 @@
 let express = require("express");
 let app = express();
 
-const {mongo: {inmuebleModel, usuarioModel, visitaModel, servicioModel, contratoModel } } = require('../../databases');
+const {mongo: {inmuebleModel, usuarioModel, visitaModel, servicioModel, contratoModel, mensajeModel } } = require('../../databases');
 
 //BUSQUEDAS ESPECIFICAS
 module.exports= {
@@ -113,6 +113,38 @@ module.exports= {
             return res.status(400).json({
               ok: false,
               mensaje: "Los tipos de búsqueda son: usuarios, visitas, inmuebles, servicios",
+              error: { message: "Tipo de colección no válida" },
+            });
+        }
+      
+        promesa.then((data) => {
+          res.status(200).json({
+            ok: true,
+            [tabla]: data,
+          });
+        });
+      },
+
+      buscarMensajes: (req, res) => {
+        let tabla = req.params.tabla;
+        let busqueda = req.params.busqueda;
+
+        let desde = req.params.desde;
+        desde = Number(desde);
+
+        let expresionRegularBusqueda = new RegExp(busqueda, "i");
+
+        let promesa;
+      
+        switch (tabla) {
+          case "mensajes":
+            promesa = buscarMensajes(expresionRegularBusqueda, desde);
+            break;
+
+          default:
+            return res.status(400).json({
+              ok: false,
+              mensaje: "Los tipos de búsqueda son: mensajes",
               error: { message: "Tipo de colección no válida" },
             });
         }
@@ -281,5 +313,23 @@ module.exports= {
       });
     }
 
+    function buscarMensajes(expresionRegular, desde) {
+
+      return new Promise((resolve, reject) => {
+        
+        mensajeModel.find({})
+          .or([{ titulo: expresionRegular }, { asunto: expresionRegular }, { estado: expresionRegular }])
+          .skip(desde)
+          .limit(6)
+          .exec((err, mensajes) => {
+            if (err) {
+              reject("Error al cargar los mensajes", err);
+            } else {
+              resolve(mensajes);
+            }
+          });
+      });
+    }
+    
     
 

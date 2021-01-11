@@ -301,6 +301,33 @@ module.exports = {
     });
   },
 
+  eliminarInmuebleDesdeElAdministrador: (req, res) => {
+    let id = req.params.id;
+  
+    inmuebleModel.findByIdAndRemove(id, (err, inmuebleBorrado) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Error al borrar inmueble",
+          errors: err,
+        });
+      }
+  
+      if (!inmuebleBorrado) {
+        return res.status(400).json({
+          ok: false,
+          mensaje: "No existe un inmueble con ese ID",
+          errors: { message: "No existe un inmueble con ese ID" },
+        });
+      }
+  
+      res.status(200).json({
+        ok: true,
+        servicio: inmuebleBorrado,
+      });
+    });
+  },
+
   desactivarinmueble: async (req, res) => {
     let id = req.params.id;
     const { estado, publicado } = req.body;

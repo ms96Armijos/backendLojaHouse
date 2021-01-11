@@ -83,6 +83,7 @@ module.exports = {
         });
     });*/
   },
+
   //QUEDA PENDIENTE PARA REVISARLO CUANDO ESTÉ EL TOKEN
   obtenerVisitasArrendatarioAdministrador: async (req, res, next) => {
 
@@ -365,7 +366,7 @@ module.exports = {
     let id = req.params.id;
 
     visitaModel.findById(id)
-      .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula').populate('inmueble')
+      .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula rol').populate('inmueble')
       .exec((err, visita) => {
         if (err) {
           return res.status(500).json({
@@ -393,7 +394,7 @@ module.exports = {
     let id = req.params.id;
 
     visitaModel.findById(id)
-      .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula')
+      .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula rol')
       .populate('inmueble')
       .exec((err, visita) => {
         if (err) {
@@ -410,7 +411,7 @@ module.exports = {
             errors: { message: 'No existe el visita con ese ID' }
           });
         }
-
+        console.log(visita)
         res.status(200).json({
           ok: true,
           visita: visita
