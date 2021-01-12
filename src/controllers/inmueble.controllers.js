@@ -419,7 +419,7 @@ module.exports = {
     await inmuebleModel.find({ $and: [{ publicado: { $eq: 'PUBLICO' } }, { estado: { $eq: 'DISPONIBLE' } }] })
       .populate('usuario', 'nombre correo')
       .skip(desde)
-      .limit(6)
+      .limit(9)
       .exec((err, inmuebles) => {
         if (err) {
           return res.status(500).json({

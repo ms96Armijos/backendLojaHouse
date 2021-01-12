@@ -14,7 +14,8 @@ const {
     obtenerUsuariosArrendadores,
     verificarUsuarioRepetido,
     verificarPerfilUsuario,
-} = require('../controllers/usuario.controllers')
+} = require('../controllers/usuario.controllers');
+const { validarcedula } = require('../../utils/validarcedula');
 
 
 //OPERACIONES CRUD

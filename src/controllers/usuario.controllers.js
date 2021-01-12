@@ -2,6 +2,7 @@ const { mongo: { usuarioModel, inmuebleModel } } = require("../../databases");
 let bcrypt = require("bcryptjs");
 let generarPassword = require("generate-password");
 let nodemailer = require("nodemailer");
+const { validarcedula } = require("../../utils/validarcedula");
 
 module.exports = {
   //FUNCIÓN PARA OBTENER TODOS LOS USUARIOS REGISTRADOS
@@ -239,7 +240,16 @@ module.exports = {
       });
     }
 
-    usuarioModel.findById(id, async (err, usuario) => {
+    if(!validarcedula(cedula)){
+      return res.status(400).json({
+        mensaje: "Ingresa una cédula válida",
+        ok: false,
+        errors: { message: "Ingresa una cédula válida" },
+      });
+    }
+    
+
+    usuarioModel.findById(id, (err, usuario) => {
       if (err) {
         return res.status(500).json({
           ok: false,
@@ -262,7 +272,7 @@ module.exports = {
       usuario.movil = movil;
       usuario.convencional = convencional;
 
-      await usuario.save((err, usuarioGuardado) => {
+       usuario.save((err, usuarioGuardado) => {
         if (err) {
           return res.status(400).json({
             ok: false,
