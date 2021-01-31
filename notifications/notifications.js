@@ -1,7 +1,7 @@
 const firebaseAdmin = require('firebase-admin');
 
 function initFirebase(){
-    const serviceAccount = require(__dirname + '../utils/testlojahouse-firebase-adminsdk-kb8ev-20bfe675cb.json');
+    const serviceAccount = require('../utils/testlojahouse-firebase-adminsdk-kb8ev-20bfe675cb.json');
     firebaseAdmin.initializeApp({
         credential: firebaseAdmin.credential.cert(serviceAccount)
     });

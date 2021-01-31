@@ -72,7 +72,8 @@ function buscarInmuebles(busqueda, expresionRegular, auth, rol, desde) {
 
     if (rol == 'ADMINISTRADOR') {
       console.log('adm')
-      inmuebleModel.find({ nombre: expresionRegular, usuario: auth })
+      inmuebleModel.find({usuario: auth })
+      .or([{ estado: expresionRegular }, { nombre: expresionRegular }])
         .populate("usuario", "nombre apellido correo")
         .skip(desde)
         .limit(6).
@@ -184,7 +185,7 @@ function buscarServicios(busqueda, expresionRegular ) {
 function buscarContratos(busqueda, expresionRegular, auth, desde) {
   return new Promise((resolve, reject) => {
     contratoModel.find({ nombrecontrato: expresionRegular, usuarioarrendador: auth })
-      .populate('usuarioarrendatario', " nombre")
+      .populate('usuarioarrendatario', "nombre")
       .populate('inmueble', " tipo")
       .skip(desde)
       .limit(6)

@@ -563,7 +563,7 @@ module.exports = {
         console.log('HOLAAAA: ' + usuario._id + '==' + req.usuario._id)
         return res.status(400).json({
           ok: false,
-          mensaje: "No se puede asignar el contrato al mismo dueño",
+          mensaje: "No se puede asignar el contrato al usuario: "+correo,
           errors: { message: "No se puede asignar el contrato al mismo dueño" },
         });
       }

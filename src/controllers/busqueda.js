@@ -161,11 +161,10 @@ module.exports= {
     
     function buscarInmuebles(busqueda, expresionRegular, auth, rol) {
       return new Promise((resolve, reject) => {
-        
         if(rol == 'ARRENDADOR'){
           console.log('hola '+ rol)
           inmuebleModel.find({ usuario: { $in: auth}})
-          .or([{ estado: expresionRegular }, { nombre: expresionRegular }])
+          .or([{ nombre: expresionRegular }, { estado: expresionRegular }])
           .populate("usuario", "nombre apellido correo _id")
           .exec((err, inmuebles) => {
             console.log(inmuebles)
@@ -263,6 +262,8 @@ module.exports= {
     function buscarContratos(busqueda, expresionRegular, auth) {
       return new Promise((resolve, reject) => {
         contratoModel.find({nombrecontrato: expresionRegular, usuarioarrendador: auth})
+        .populate('usuarioarrendatario', " nombre")
+      .populate('inmueble', " tipo")
           .exec((err, contratos) => { 
             if (err) {
               reject("Error al cargar Contratos", err);

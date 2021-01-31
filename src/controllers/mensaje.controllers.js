@@ -58,11 +58,25 @@ module.exports = {
                 errors: { message: 'No existe el mensaje con ese ID' }
               });
             }
+
+            usuarioModel.findOne({ correo: { $in: mensaje.correo } }, (err, usuario) => {
+              if (err) {
+                return res.status(500).json({
+                  ok: false,
+                  mensaje: "Error contando usuarios",
+                  errors: err,
+                });
+              }
+    
+              res.status(200).json({
+                ok: true,
+                mensaje: mensaje,
+                usuario: usuario,
+              });
+            });
+
       
-            res.status(200).json({
-              ok: true,
-              mensaje: mensaje
-            })
+            
           })
       },
 
@@ -104,6 +118,13 @@ module.exports = {
             return res.status(500).json({
               ok: false,
               mensaje: "El usuario no existe",
+              errors: err,
+            });
+          }
+          if(usuarioObtenido.rol === 'ADMINISTRADOR'){
+            return res.status(400).json({
+              ok: false,
+              mensaje: "No se puede realizar esta acción",
               errors: err,
             });
           }

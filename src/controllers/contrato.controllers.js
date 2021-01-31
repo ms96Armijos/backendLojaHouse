@@ -159,11 +159,9 @@ module.exports = {
       });
     }
 
-    
-    
     let fecha1 = moment(fechainicio);
     let fecha2 = moment(fechafin);
-
+    
     if (moment(fecha2).isAfter(fecha1)) {
 
       if(fecha2.diff(fecha1, "month") >= 1){
@@ -177,8 +175,7 @@ module.exports = {
         });
       }
       }
-    
-
+  
 
     let contrato = new contratoModel({
       nombrecontrato,
@@ -196,8 +193,8 @@ module.exports = {
     
 
       contrato.save(async (err, contratoGuardado) => {
-
-      await inmuebleModel.findById(inmueble,  (err, inmuebleEncontrado) => {
+        
+        await inmuebleModel.findById(inmueble,  (err, inmuebleEncontrado) => {
         if (err) {
           return res.status(500).json({
             ok: false,
@@ -205,20 +202,28 @@ module.exports = {
             errors: err,
           });
         }
-
+        
         if (!inmuebleEncontrado) {
           return res.status(400).json({
             ok: false,
-            mensaje: "El inmueble con el id: " + id + " no existe",
+            mensaje: "El inmueble con el id no existe",
             errors: { message: "No existe un inmueble con ese ID" },
+          });
+        }
+
+        if(inmuebleEncontrado.estado === 'OCUPADO'){
+          return res.status(400).json({
+            ok: false,
+            mensaje: "El inmueble está ocupado",
+            errors: { message: "El inmueble está ocupado"},
           });
         }
         inmuebleEncontrado.publicado = 'PRIVADO';
         inmuebleEncontrado.estado = 'OCUPADO';
-
+        
         inmuebleEncontrado.save((err, inmuebleGuardado) => {
-
-
+          
+          
           if (err) {
             return res.status(400).json({
               ok: false,
@@ -387,7 +392,7 @@ module.exports = {
 
   aceptarAcuerdo: async (req, res) => {
     let id = req.params.id;
-    const { acuerdo } = req.body;
+    const { acuerdo, estado } = req.body;
 
     await contratoModel.findById(id, (err, contrato) => {
       if (err) {
@@ -407,6 +412,7 @@ module.exports = {
       }
 
       contrato.acuerdo = acuerdo;
+      contrato.estado = estado;
 
       contrato.save((err, contratoGuardado) => {
         if (err) {
@@ -420,7 +426,48 @@ module.exports = {
         res.status(200).json({
           ok: true,
           contrato: contratoGuardado,
-          mensaje: `La visita está: ${acuerdo}`,
+          mensaje: `La contrato está: ${acuerdo}`,
+        });
+      });
+    });
+  },
+
+  estadoContrato: async (req, res) => {
+    let id = req.params.id;
+    const { estado } = req.body;
+
+    await contratoModel.findById(id, (err, contrato) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Error al buscar contrato",
+          errors: err,
+        });
+      }
+
+      if (!contrato) {
+        return res.status(400).json({
+          ok: false,
+          mensaje: "El contrato con el id: " + id + " no existe",
+          errors: { message: "No existe un contrato con ese ID" },
+        });
+      }
+
+      contrato.estado = estado;
+
+      contrato.save((err, contratoGuardado) => {
+        if (err) {
+          return res.status(400).json({
+            ok: false,
+            mensaje: "Error al cambiar el estado del contrato",
+            errors: err,
+          });
+        }
+
+        res.status(200).json({
+          ok: true,
+          contrato: contratoGuardado,
+          mensaje: `La contrato está: ${estado}`,
         });
       });
     });

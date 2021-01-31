@@ -139,7 +139,7 @@ module.exports = {
   },
 
 
-  crearInmueble: async (req, res) => {
+  crearInmueble: (req, res) => {
 
     const { nombre,
        descripcion, 
@@ -175,7 +175,7 @@ module.exports = {
     });
     console.log(inmueble)
 
-    await inmueble.save((err, inmuebleGuardado) => {
+     inmueble.save((err, inmuebleGuardado) => {
       if (err) {
         return res.status(400).json({
           ok: false,
@@ -260,7 +260,7 @@ module.exports = {
 
   eliminarInmueble: async (req, res) => {
     let id = req.params.id;
-    const { estado } = req.body;
+    const { estado, publicado } = req.body;
 
 
     await inmuebleModel.findById(id, async(err, inmueble) => {
@@ -281,6 +281,7 @@ module.exports = {
       }
 
       inmueble.estado = estado;
+      inmueble.publicado = publicado;
 
 
        inmueble.save((err, inmuebleGuardado) => {
@@ -301,29 +302,45 @@ module.exports = {
     });
   },
 
-  eliminarInmuebleDesdeElAdministrador: (req, res) => {
+  eliminarInmuebleDesdeElAdministrador: async(req, res) => {
     let id = req.params.id;
+    const { estado, publicado } = req.body;
   
-    inmuebleModel.findByIdAndRemove(id, (err, inmuebleBorrado) => {
+    await inmuebleModel.findById(id, async(err, inmueble) => {
       if (err) {
         return res.status(500).json({
           ok: false,
-          mensaje: "Error al borrar inmueble",
+          mensaje: "Error al buscar inmueble",
           errors: err,
         });
       }
-  
-      if (!inmuebleBorrado) {
+
+      if (!inmueble) {
         return res.status(400).json({
           ok: false,
-          mensaje: "No existe un inmueble con ese ID",
+          mensaje: "El inmueble con el id: " + id + " no existe",
           errors: { message: "No existe un inmueble con ese ID" },
         });
       }
-  
-      res.status(200).json({
-        ok: true,
-        servicio: inmuebleBorrado,
+
+      inmueble.estado = estado;
+      inmueble.publicado = publicado;
+
+
+       inmueble.save((err, inmuebleGuardado) => {
+        if (err) {
+          return res.status(400).json({
+            ok: false,
+            mensaje: "Error al eliminar inmueble",
+            errors: err,
+          });
+        }
+
+        res.status(200).json({
+          ok: true,
+          inmueble: inmuebleGuardado,
+          mensaje: "Se ha eliminado el inmueble correctamente"
+        });
       });
     });
   },

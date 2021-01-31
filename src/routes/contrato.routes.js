@@ -9,6 +9,7 @@ const {
     actualizarContrato, 
     eliminarContrato,
     aceptarAcuerdo,
+    estadoContrato,
     contratoarrendatario,
     obtenerContratosArrendatarioAdministrador
 } = require('../controllers/contrato.controllers')
@@ -20,6 +21,7 @@ router.post('/crearcontrato', mdwVerificarToken.verificaToken,crearContrato);
 router.put('/actualizarcontrato/:id', mdwVerificarToken.verificaToken,actualizarContrato);
 router.delete('/eliminarcontrato/:id', mdwVerificarToken.verificaToken,eliminarContrato);
 router.put('/acuerdo/:id/aceptar', mdwVerificarToken.verificaToken, aceptarAcuerdo);
+router.put('/:id/estado', mdwVerificarToken.verificaToken, estadoContrato);
 
 router.get('/arrendatario/obtenercontratos/:desde', mdwVerificarToken.verificaToken, contratoarrendatario);
 

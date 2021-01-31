@@ -25,12 +25,12 @@ module.exports = {
           });
         }
 
-        inmuebleModel.countDocuments({ usuario: {$in: idArrendador} }, (err, conteo) => {
+        inmuebleModel.countDocuments({ $and: [{ usuario: {$in: idArrendador} }, { estado: {$ne: 'ELIMINADO'} }] }, (err, conteo) => {
 
           if (err) {
             return res.status(500).json({
               ok: false,
-              mensaje: "Error contando usuarios",
+              mensaje: "Error contando inmuebles",
               errors: err,
             });
           }

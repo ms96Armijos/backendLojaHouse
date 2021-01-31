@@ -35,6 +35,9 @@ const rutaBusqueda = require('./src/routes/busqueda.routes');
 const rutaRenovarToken = require('./src/routes/renovarToken.routes');
 const rutaMensaje = require('./src/routes/mensaje.routes');
 
+const rutaEnviarNotificaciones = require('./src/routes/enviar.notificaciones.routes');
+
+
 
 
 //RUTAS PARA EL ADMINISTRADOR-ARRENDADOR
@@ -62,6 +65,9 @@ app.use('/busqueda', rutaBusqueda);
 
 app.use('/renovar', rutaRenovarToken);
 app.use('/mensaje', rutaMensaje);
+
+app.use('/enviarnotificaciones', rutaEnviarNotificaciones);
+
 
 //RUTAS ADMINISTRADOR-ARRENDADOR
 app.use('/admin/inmueble', rutaInmueblesAdminArrendador);

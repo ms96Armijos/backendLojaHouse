@@ -40,5 +40,5 @@ router.get('/inmuebles/publicos/movil', inmueblesPublicosMovil);
 router.get('/obtenerinmuebles/arrendador/:desde', mdwVerificarToken.verificaToken, obtenerinmueblesarrendador);
 
 //ELIMINAR INMUEBLE DESDE EL ADMINISITRADOR
-router.delete('/eliminar-inmueble/admin/:id', mdwVerificarToken.verificaToken, eliminarInmuebleDesdeElAdministrador);
+router.put('/eliminar-inmueble/admin/:id', mdwVerificarToken.verificaToken, eliminarInmuebleDesdeElAdministrador);
 module.exports = router;
