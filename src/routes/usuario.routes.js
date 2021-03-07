@@ -7,6 +7,7 @@ const {
     obtenerUsuarioEspecifico, 
     crearUsuario, 
     actualizarUsuario,
+    actualizarFirebaseTokenUsuario,
     cambiarPassword,
     desactivarUsuario,
     reseteoDePassword,
@@ -28,6 +29,8 @@ router.get('/obtenerusuario/:id', mdwVerificarToken.verificaToken, obtenerUsuari
 router.put('/actualizarusuario/:id', mdwVerificarToken.verificaToken, actualizarUsuario);
 router.get('/buscarusuario/buscar/:correo', mdwVerificarToken.verificaToken, buscarUsuario);
 
+//ACTUALIZAR TOKEN DEL USUARIO OBTENIDO DE FCM
+router.put('/actualizartoken/usuario/:id', mdwVerificarToken.verificaToken, actualizarFirebaseTokenUsuario);
 
 //RUTA DE RESETEO DE PASSWORD
 router.put('/reseteopassword', reseteoDePassword);

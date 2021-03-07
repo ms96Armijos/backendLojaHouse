@@ -11,6 +11,7 @@ const {
     aceptarAcuerdo,
     estadoContrato,
     contratoarrendatario,
+    contratoarrendatariomovil,
     obtenerContratosArrendatarioAdministrador
 } = require('../controllers/contrato.controllers')
 
@@ -24,6 +25,7 @@ router.put('/acuerdo/:id/aceptar', mdwVerificarToken.verificaToken, aceptarAcuer
 router.put('/:id/estado', mdwVerificarToken.verificaToken, estadoContrato);
 
 router.get('/arrendatario/obtenercontratos/:desde', mdwVerificarToken.verificaToken, contratoarrendatario);
+router.get('/arrendatario/obtenercontratosmovil', mdwVerificarToken.verificaToken, contratoarrendatariomovil);
 
 //ADMINISTRADOR-ARRENDATARIO
 router.get('/administrador/arrendatario/contratos/:desde', mdwVerificarToken.verificaToken, obtenerContratosArrendatarioAdministrador);

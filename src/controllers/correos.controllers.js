@@ -42,6 +42,75 @@ module.exports = {
       }
     });
   },
+
+  enviarCorreo: (req, res) => {
+    const {correo} = req.body;
+
+    /*
+      host, hace referencia al nombre o IP de tu servidor SMTP
+      port, puerto asignado por el servidor SMTP para el envió de correos
+      secure, esto se entiende mejor de la siguiente manera si usas https su valor debe ser true, de lo contrario false
+      auth, es un JSON con los datos de autentificación  al servidor SMTP
+      type, escribe login para acceder al servidor SMTP
+      user, usuario registrado
+      pass, contraseña del usuario registrado
+    */
+
+    /*crear un objeto transportador a través del siguiente método "createTransport". */
+
+      let jConfig = {
+        host:"smtp.gmail.com", 
+        port:465, 
+        secure: true, 
+        auth:{ 
+              type:"login", 
+              user: 'tiviarmijos@gmail.com', 
+            pass: "maicol1996" 
+        }
+        };
+
+
+    console.log(correo)
+    let min = 1111;
+    let max = 9999;
+    let code = Math.floor(Math.random()*(max-min)+min);
+
+    /* 
+    from, es el correo origen o el correo que esta enviando el email
+    to, el destinatario quien debe recibir el correo
+    subject, asunto del correo
+    html, Nodemailer nos permite enviar un mensaje codificado en lenguaje HTML lo cual es muy útil en campañas de marketing
+    */
+    let mailOptions = {
+      from: "<tiviarmijos@gmail.com>",//remitente
+      to: correo,//destinatario
+      subject: "Hola",//asunto del correo
+      html:` 
+           <div> 
+           <p>Hola amigo</p> 
+           <p>Esto es una prueba del vídeo</p> 
+           <p>¿Cómo enviar correos eletrónicos con Nodemailer en NodeJS </p> 
+           </div> `
+    }
+
+    let transporter = nodemailer.createTransport(jConfig);
+
+    
+    /*Este objeto crea una variable de transporte que se comunicara con el servidor SMTP y enviará el correo, por ejemplo: */
+     transporter.sendMail(mailOptions, (err, info)=>{
+      if(err){
+        res.status(500).send({
+          message: 'Hola, ha ocurrido un error en el server', 
+          error: err
+      });
+      }else{
+        res.status(200).send({
+          codigo: code
+        })
+      }
+      transporter.close();
+    });
+  }
 };
 
 /*const prepareToSendEmail = (user, subject, htmlMessage) => {

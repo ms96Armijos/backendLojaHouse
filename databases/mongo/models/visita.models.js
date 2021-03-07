@@ -4,7 +4,7 @@ let Schema = mongoose.Schema;
 
 
 let estadosValidos = {
-    values: ['ACEPTADA', 'RECHAZADA', 'PENDIENTE', 'ATENDIDA'],
+    values: ['ACEPTADA', 'RECHAZADA', 'PENDIENTE', 'ATENDIDA', 'ELIMINADA'],
     message: '{VALUE} no es un estado permitido'
 }
 

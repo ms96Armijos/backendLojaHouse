@@ -348,7 +348,7 @@ module.exports = {
     });
   },
 
-  //FALTA IMPLEMENTAR EL TOKEN
+
   contratoarrendatario: (req, res, next) => {
     let desde = req.params.desde;
     desde = Number(desde);
@@ -360,6 +360,48 @@ module.exports = {
       .populate("inmueble")
       .skip(desde)
       .limit(6)
+      .exec((err, contratos) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            mensaje: "Error cargando contrato",
+            errors: err,
+          });
+        }
+
+        contratoModel.countDocuments(
+          { usuarioarrendatario: req.usuario._id },
+          (err, conteo) => {
+            if (err) {
+              return res.status(500).json({
+                ok: false,
+                mensaje: "Error contando contratos",
+                errors: err,
+              });
+            }
+
+            res.status(200).json({
+              ok: true,
+              contratos: contratos,
+              total: conteo,
+            });
+          }
+        );
+      });
+  },
+
+  //ruta para obtener el scroll infinito en flutter
+  contratoarrendatariomovil: (req, res, next) => {
+    let desde = req.params.desde;
+    desde = Number(desde);
+
+    contratoModel
+      .find({ usuarioarrendatario: req.usuario._id })
+      .populate("usuarioarrendatario", "nombre apellido correo")
+      .populate("usuarioarrendador", "nombre apellido correo")
+      .populate("inmueble")
+      //.skip(desde)
+      //.limit(6)
       .exec((err, contratos) => {
         if (err) {
           return res.status(500).json({

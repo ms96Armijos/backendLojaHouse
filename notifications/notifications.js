@@ -1,7 +1,7 @@
 const firebaseAdmin = require('firebase-admin');
 
 function initFirebase(){
-    const serviceAccount = require('../utils/testlojahouse-firebase-adminsdk-kb8ev-20bfe675cb.json');
+    const serviceAccount = require('../utils/notificationstesis-firebase-adminsdk-b8kxs-5124cfd1eb.json');
     firebaseAdmin.initializeApp({
         credential: firebaseAdmin.credential.cert(serviceAccount)
     });
@@ -39,7 +39,7 @@ module.exports = {
 function sendMessage ( message ){
     firebaseAdmin.messaging().send(message)
     .then((response) => {
-        console.log('Mensaje enviado correctamente: ', message);
+        return console.log('Mensaje enviado correctamente: ', message);
     })
     .catch((error) => {
         console.log('Erros al enviar mensaje: ', error);

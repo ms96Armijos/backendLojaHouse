@@ -289,6 +289,49 @@ module.exports = {
     });
   },
 
+    //FUNCIÓN PARA ACTUALIZAR TOKEN DE FIREBASE-FLUTTER
+    actualizarFirebaseTokenUsuario: (req, res) => {
+      let id = req.params.id;
+      const { tokenfirebase } = req.body;
+
+      console.log("TOKENFCM: "+tokenfirebase);
+
+      usuarioModel.findById(id, (err, usuario) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            mensaje: "Error al buscar usuario",
+            errors: err,
+          });
+        }
+  
+        if (!usuario) {
+          return res.status(400).json({
+            ok: false,
+            mensaje: "El usuario con el id: " + id + " no existe",
+            errors: { message: "No existe un usuario con ese ID" },
+          });
+        }
+  
+        usuario.tokenfirebase = tokenfirebase;
+  
+         usuario.save((err, usuarioGuardado) => {
+          if (err) {
+            return res.status(400).json({
+              ok: false,
+              mensaje: "Error al actualizar usuario",
+              errors: err,
+            });
+          }
+  
+          res.status(200).json({
+            ok: true,
+            usuario: usuarioGuardado,
+          });
+        });
+      });
+    },
+
   //FUNCIÓN PARA CAMBIAR CONTRASEÑA
   cambiarPassword: (req, res) => {
     let id = req.params.id;
@@ -567,6 +610,16 @@ module.exports = {
           errors: { message: "No se puede asignar el contrato al mismo dueño" },
         });
       }
+
+      if (usuario._id == req.usuario._id || usuario.rol == 'ARRENDADOR') {
+        console.log('HOLAAAA: ' + usuario._id + '==' + req.usuario._id)
+        return res.status(400).json({
+          ok: false,
+          mensaje: "No se puede asignar el contrato al usuario: "+correo,
+          errors: { message: "No se puede asignar el contrato a un arrendador" },
+        });
+      }
+
 
       if (usuario.estado == '0') {
         return res.status(400).json({

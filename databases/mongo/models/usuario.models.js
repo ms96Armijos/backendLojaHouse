@@ -27,6 +27,7 @@ let usuarioSchema = new Schema({
     convencional: {type: String, required: false},
     estado: {type: String, required:false, default: '1', enum: estadosValidos},
     rol: {type: String, required: [true, 'Debes indicar quién eres'], enum: rolesValidos},
+    tokenfirebase: {type: String, required: false},
 }, {timestamps: true, versionKey: false}, {collection: 'usuarios'});
 
 

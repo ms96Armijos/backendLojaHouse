@@ -3,7 +3,7 @@ module.exports = {
 
     enviarUnaNotificacion: (req, res, next) => {
       const data = {
-        tokenId: "",
+        tokenId: "ekV3E5IPRiqxfe8EePE8JL:APA91bFJ8_CFdeCoRshFvreu6unyK7hv_0EbZrzJrPPbavyaJgPDAtlkGtWsxBEQEKt0vMbIrBn8LQG3TP2tvlVVissnukBkhOo9BCOJJ8jy7C_yAssjeO9TKN3rVwUBEzxaRXTy96nm",
         titulo: "Mensaje one to one",
         mensaje: "A un user"
       }

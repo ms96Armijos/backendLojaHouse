@@ -22,3 +22,7 @@ process.on('SIGINT', () => {
         process.exit(0);
     });
 })
+
+
+//REEMPLAZAR EN EL ARCHIVO .ENV PARA BASE DE DATOS REMOTA
+/*MONGO_URI=mongodb+srv://plagios123:plagios123@cluster0.x5gj7.mongodb.net/lojahouse?retryWrites=true&w=majority */

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express();
 
-const { sendEmail} = require('../controllers/correos.controllers');
+const { sendEmail, enviarCorreo} = require('../controllers/correos.controllers');
 
 
-router.post('/',sendEmail);
+router.post('/',enviarCorreo);
 
 module.exports = router;
