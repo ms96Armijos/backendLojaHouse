@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const { mongoURI } = require('../config');
 mongoose.set('useCreateIndex', true); 
 
+
+
+
+
 const verificarConexion = () =>{
     //READYSTATE PARA VER EL ESTADO DE LA BD
     return mongoose.connection.readyState;

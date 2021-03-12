@@ -47,7 +47,7 @@ module.exports = {
     let desde = req.params.desde;
     desde = Number(desde);
 
-    inmuebleModel.find({ $and: [{ usuario: req.usuario._id }, { estado: {$ne: 'ELIMINADO'} }]     })
+    inmuebleModel.find({ $and: [{ usuario: req.usuario._id }, { estado: {$in: 'DISPONIBLE'} }, { estado: {$ne: 'ELIMINADO'} }]     })
       .populate('usuario', 'nombre correo rol')
       .skip(desde)
       .limit(6)
@@ -60,7 +60,7 @@ module.exports = {
           });
         }
 
-        inmuebleModel.countDocuments({ $and: [{ usuario: req.usuario._id }, { estado: {$ne: 'ELIMINADO'} }] }, (err, conteo) => {
+        inmuebleModel.countDocuments({ $and: [{ usuario: req.usuario._id }, { estado: {$in: 'DISPONIBLE'} }, { estado: {$ne: 'ELIMINADO'} }] }, (err, conteo) => {
 
           if (err) {
             return res.status(500).json({
@@ -349,7 +349,6 @@ module.exports = {
     let id = req.params.id;
     const { estado, publicado } = req.body;
     
-
     await inmuebleModel.findById(id,  (err, inmueble) => {
       if (err) {
         return res.status(500).json({
@@ -367,11 +366,19 @@ module.exports = {
         });
       }
 
+      if(inmueble.estado == 'ELIMINADO'){
+        return res.status(400).json({
+          ok: false,
+          mensaje: "No se puede habilitar el inmueble",
+          errors: { message: "No se puede habilitar el inmueble" },
+        });
+      }
+
       inmueble.publicado = publicado;
       inmueble.estado = estado;
 
 
-       inmueble.save((err, inmuebleGuardado) => {
+      inmueble.save((err, inmuebleGuardado) => {
         if (err) {
           return res.status(400).json({
             ok: false,

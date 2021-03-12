@@ -14,7 +14,12 @@ module.exports = {
     const inmueble = await inmuebleModel.find({ usuario: { $in: idArrendador } });
 
     if (inmueble) {
-      const visita = await visitaModel.find({ inmueble: { $in: inmueble } })
+      const visita = await visitaModel.find({ 
+        $and: [
+          { inmueble: { $in: inmueble }  },
+           { estado: { $ne: 'ELIMINADA' } },
+         ]
+       })
         .populate('usuarioarrendatario', 'nombre apellido imagen correo movil cedula')
         .populate('inmueble')
         .skip(desde)
@@ -28,7 +33,12 @@ module.exports = {
             });
           }
 
-          await visitaModel.countDocuments({ inmueble: { $in: inmueble } }, (err, conteo) => {
+          await visitaModel.countDocuments({ 
+            $and: [
+              { inmueble: { $in: inmueble }  },
+              { estado: { $ne: 'ELIMINADA' } },
+             ]
+           }, (err, conteo) => {
 
             if (err) {
               return res.status(500).json({

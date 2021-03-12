@@ -12,7 +12,7 @@ module.exports = {
 
    
 
-    inmuebleModel.find({ $and: [{ usuario: {$in: idArrendador} }, { estado: {$ne: 'ELIMINADO'} }] })
+    inmuebleModel.find({ $and: [{ usuario: {$in: idArrendador} }, { estado: {$in: 'DISPONIBLE'} }, { estado: {$ne: 'ELIMINADO'} }] })
       .populate('usuario', 'nombre correo rol imagen')
       .skip(desde)
       .limit(6)
@@ -25,7 +25,7 @@ module.exports = {
           });
         }
 
-        inmuebleModel.countDocuments({ $and: [{ usuario: {$in: idArrendador} }, { estado: {$ne: 'ELIMINADO'} }] }, (err, conteo) => {
+        inmuebleModel.countDocuments({ $and: [{ usuario: {$in: idArrendador} }, { estado: {$in: 'DISPONIBLE'} }, { estado: {$ne: 'ELIMINADO'} }] }, (err, conteo) => {
 
           if (err) {
             return res.status(500).json({

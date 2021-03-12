@@ -72,7 +72,7 @@ function buscarInmuebles(busqueda, expresionRegular, auth, rol, desde) {
 
     if (rol == 'ADMINISTRADOR') {
       console.log('adm')
-      inmuebleModel.find({usuario: auth })
+      inmuebleModel.find({ $and: [{ usuario: {$in: auth} }, { estado: {$in: 'DISPONIBLE'} }, { estado: {$ne: 'ELIMINADO'} }] })
       .or([{ estado: expresionRegular }, { nombre: expresionRegular }])
         .populate("usuario", "nombre apellido correo")
         .skip(desde)

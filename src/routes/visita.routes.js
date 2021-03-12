@@ -23,7 +23,7 @@ router.get('/administrador/arrendador/visitas/:desde', mdwVerificarToken.verific
 //CRUD ARRENDADOR (VISITA)
 router.post('/crearvisita', mdwVerificarToken.verificaToken, crearVisita);
 router.put('/actualizarvisita/:id', mdwVerificarToken.verificaToken, actualizarVisita);
-router.delete('/eliminarvisita/:id', mdwVerificarToken.verificaToken, eliminarVisita);
+router.put('/eliminarvisita/:id', mdwVerificarToken.verificaToken, eliminarVisita);
 
 //RUTAS DEL USUARIO ARRENDADOR PARA ACEPTAR LAS VISITAS
 router.put('/arrendador/aceptarvisita/:id', aceptarVisita);

@@ -478,6 +478,8 @@ module.exports = {
     let id = req.params.id;
     const { estado } = req.body;
 
+   
+
     await contratoModel.findById(id, (err, contrato) => {
       if (err) {
         return res.status(500).json({
@@ -494,6 +496,24 @@ module.exports = {
           errors: { message: "No existe un contrato con ese ID" },
         });
       }
+
+
+        var momentB = moment(contrato.fechafin,"YYYY/MM/DD");
+        var fechaAhora = moment().format('YYYY/MM/DD');
+
+        console.log(fechaAhora)
+
+    if (moment(fechaAhora).isBefore(momentB)) {
+
+        return res.status(400).json({
+          ok: false,
+          mensaje: "El contrato finaliza la fecha: "+contrato.fechafin,
+          errors: "El contrato finaliza la fecha: "+moment(contrato.fechafin).format('DD/MM/YYYY'),
+        });
+      }
+
+
+      
 
       contrato.estado = estado;
 

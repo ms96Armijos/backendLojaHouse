@@ -12,7 +12,12 @@ module.exports = {
     const inmueble = await inmuebleModel.find({ usuario: { $in: req.usuario._id } });
 
     if (inmueble) {
-      const visita = await visitaModel.find({ inmueble: { $in: inmueble } })
+      const visita = await visitaModel.find({ 
+        $and: [
+        { inmueble: { $in: inmueble }  },
+         { estado: { $ne: 'ELIMINADA' } },
+       ]
+        })
         .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula imagen')
         .populate('inmueble')
         .skip(desde)
@@ -28,7 +33,12 @@ module.exports = {
 
 
 
-          visitaModel.countDocuments({ inmueble: { $in: inmueble } }, (err, conteo) => {
+          visitaModel.countDocuments({ 
+            $and: [
+              { inmueble: { $in: inmueble }  },
+               { estado: { $ne: 'ELIMINADA' } },
+             ]
+           }, (err, conteo) => {
 
             if (err) {
               return res.status(500).json({
@@ -252,32 +262,57 @@ module.exports = {
     });
   },
 
-  eliminarVisita: (req, res) => {
+  eliminarVisita: async(req, res) => {
     let id = req.params.id;
+    //el estado debe recibirse como eliminado
+    const { estado } = req.body;
 
-    visitaModel.findByIdAndRemove(id, (err, visitaBorrado) => {
+    await visitaModel.findById(id, (err, visita) => {
       if (err) {
         return res.status(500).json({
           ok: false,
-          mensaje: "Error al borrar usuario",
+          mensaje: "Error al buscar visita",
           errors: err,
         });
       }
 
-      if (!visitaBorrado) {
+      if (!visita) {
         return res.status(400).json({
           ok: false,
-          mensaje: "No existe un visita con ese ID",
+          mensaje: "El visita con el id: " + id + " no existe",
           errors: { message: "No existe un visita con ese ID" },
         });
       }
 
-      res.status(200).json({
-        ok: true,
-        visita: visitaBorrado,
-        mensaje: "Se ha eliminado la visita correctamente"
+      if(visita.estado == 'PENDIENTE' || visita.estado == 'RECHAZADA'){
+        
+        visita.estado = estado;
+
+        visita.save((err, visitaEliminada) => {
+          if (err) {
+            return res.status(400).json({
+              ok: false,
+              mensaje: "Error al eliminar la visita",
+              errors: err,
+            });
+          }
+  
+          res.status(200).json({
+            ok: true,
+            visita: visitaEliminada,
+            mensaje: `La visita está: ${estado}`,
+          });
+        });
+      }else{
+        //no puedo eliminar
+      return res.status(400).json({
+        ok: false,
+        mensaje: "No se puede eliminar, la visita ha sido "+visita.estado,
+        errors: { message: "No se puede eliminar, la visita ha sido "+visita.estado },
       });
+      }
     });
+
   },
 
   aceptarVisita: async (req, res) => {
@@ -328,7 +363,13 @@ module.exports = {
     let desde = req.params.desde;
     desde = Number(desde);
 
-    await visitaModel.find({ usuarioarrendatario: { $in: req.usuario._id } })
+    await visitaModel.find({ 
+      $and: [
+       { usuarioarrendatario: { $in: req.usuario._id } },
+        { estado: { $ne: 'ELIMINADA' } },
+      ]
+      
+       })
       .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula')
       .populate('inmueble')
       .skip(desde)
@@ -343,7 +384,12 @@ module.exports = {
         }
 
 
-        visitaModel.countDocuments({ usuarioarrendatario: { $in: req.usuario._id } }, (err, conteo) => {
+        visitaModel.countDocuments({ 
+          $and: [
+            { usuarioarrendatario: { $in: req.usuario._id } },
+            { estado: { $ne: 'ELIMINADA' } },
+            ]
+         }, (err, conteo) => {
 
           if (err) {
             return res.status(500).json({

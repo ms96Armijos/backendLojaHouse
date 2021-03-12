@@ -112,7 +112,7 @@ module.exports= {
           default:
             return res.status(400).json({
               ok: false,
-              mensaje: "Los tipos de búsqueda son: usuarios, visitas, inmuebles, servicios",
+              mensaje: "Los tipos de búsqueda son: inmuebles",
               error: { message: "Tipo de colección no válida" },
             });
         }
@@ -163,7 +163,7 @@ module.exports= {
       return new Promise((resolve, reject) => {
         if(rol == 'ARRENDADOR'){
           console.log('hola '+ rol)
-          inmuebleModel.find({ usuario: { $in: auth}})
+          inmuebleModel.find({ $and: [{ usuario: { $in: auth} }, { estado: {$in: 'DISPONIBLE'} }, { estado: {$ne: 'ELIMINADO'} }]})
           .or([{ nombre: expresionRegular }, { estado: expresionRegular }])
           .populate("usuario", "nombre apellido correo _id")
           .exec((err, inmuebles) => {
@@ -219,7 +219,13 @@ module.exports= {
     function buscarVisitasArrendatario(busqueda, expresionRegular, auth) {
       return new Promise((resolve, reject) => {
     
-           visitaModel.find({usuarioarrendatario: {$in: auth}}) 
+           visitaModel.find({
+            $and: [
+              { usuarioarrendatario: {$in: auth} },
+               { estado: { $ne: 'ELIMINADA' } },
+             ] 
+            
+            }) 
            .or([{ estado: expresionRegular }, {descripcion: expresionRegular}])
           .exec((err, visitasarrendatario) => {
             if (err) {
@@ -295,23 +301,67 @@ module.exports= {
 
       return new Promise((resolve, reject) => {
       
+        //REALIZO LA BÚSQUEDA SI MIS PRECIOS DE ALQUILER SON MAYORES A 0
+       if(primerPrecio > 0 && segundoPrecio > 0){
+         console.log('iguales')
+        inmuebleModel.find({})
+        .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio , $lte : segundoPrecio}}])
+        .exec((err, inmuebles) => {
+          console.log(inmuebles)
+          console.log(inmuebles)
+          if (err) {
+            reject("Error al cargar Inmuebles", err);
+          } 
+          if(!inmuebles){
+            reject("No existen inmuebles", err);
+          }
+          else {
+            resolve(inmuebles);
+          }
+        });
+       }
+        //REALIZO LA BÚSQUEDA SI SON PRECIOS MENORES A 50
+       else if(primerPrecio == 0 && segundoPrecio > 0){
+         console.log('segundo mayor')
+        inmuebleModel.find({})
+        .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $lte : segundoPrecio}}])
+        .exec((err, inmuebles) => {
+          console.log(inmuebles)
+          console.log(inmuebles)
+          if (err) {
+            reject("Error al cargar Inmuebles", err);
+          } 
+          if(!inmuebles){
+            reject("No existen inmuebles", err);
+          }
+          else {
+            resolve(inmuebles);
+          }
+        });
+       }
+        //REALIZO LA BÚSQUEDA SI SON PRECIOS MAYORES A 200
+       else if(primerPrecio > 0 && segundoPrecio == 0){
+        console.log('PRIMERO mayor')
+       inmuebleModel.find({})
+       .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio}}])
+       .exec((err, inmuebles) => {
+         console.log(inmuebles)
+         console.log(inmuebles)
+         if (err) {
+           reject("Error al cargar Inmuebles", err);
+         } 
+         if(!inmuebles){
+           reject("No existen inmuebles", err);
+         }
+         else {
+           resolve(inmuebles);
+         }
+       });
+      }
 
-          inmuebleModel.find({})
-          .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio , $lte : segundoPrecio} }])
-          .exec((err, inmuebles) => {
-            console.log(inmuebles)
-            console.log(inmuebles)
-            if (err) {
-              reject("Error al cargar Inmuebles", err);
-            } 
-            if(!inmuebles){
-              reject("No existen inmuebles", err);
-            }
-            else {
-              resolve(inmuebles);
-            }
-          });
-      });
+
+    });
+
     }
 
     function buscarMensajes(expresionRegular, desde) {
