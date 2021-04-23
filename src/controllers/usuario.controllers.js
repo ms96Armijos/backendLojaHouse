@@ -3,6 +3,7 @@ let bcrypt = require("bcryptjs");
 let generarPassword = require("generate-password");
 let nodemailer = require("nodemailer");
 const { validarcedula } = require("../../utils/validarcedula");
+const mailer = require('../middlewares/enviarcorreo');
 
 module.exports = {
   //FUNCIÓN PARA OBTENER TODOS LOS USUARIOS REGISTRADOS
@@ -119,7 +120,7 @@ module.exports = {
       //SI NO EXISTE, LO CREO AL USUARIO
       if (!encontrado) {
         let passwordGenerada = generarPassword.generate({
-          length: 5,
+          length: 6,
           numbers: true,
         });
 
@@ -175,6 +176,8 @@ module.exports = {
 
         console.log("usuario: " + correo);
         console.log("contraseña generada: " + passwordGenerada);
+        /**LLAMO AL MIDDLEWARE PARA NO TENER Q ESCRIBIR TODO ESE CODIGO */
+       // mailer.enviar_mail(passwordGenerada);
 
         //GUARDO EL USUARIO EN LA BASE DE DATOS
         usuario.save((err, usuarioGuardado) => {
@@ -186,6 +189,8 @@ module.exports = {
             });
           }
 
+
+          
           //ENVÍO EL CORREO LUEGO DE HABER CREADO EL USUARIO EXITOSAMENTE
           // Enviamos el email
           /* transporter.sendMail(mailOptions, function(error, info) {
@@ -213,7 +218,7 @@ module.exports = {
   //FUNCIÓN PARA ACTUALIZAR UN USUARIO
   actualizarUsuario: (req, res) => {
     let id = req.params.id;
-    const { nombre, apellido, cedula, movil, convencional, rol } = req.body;
+    const { nombre, apellido, cedula, movil, convencional } = req.body;
 
     if (nombre.length <= 0 || nombre === undefined || nombre === null) {
       return res.status(400).json({
@@ -312,6 +317,10 @@ module.exports = {
             errors: { message: "No existe un usuario con ese ID" },
           });
         }
+
+       /* if(usuario.tokenfirebase){
+
+        }*/
   
         usuario.tokenfirebase = tokenfirebase;
   
@@ -404,7 +413,7 @@ module.exports = {
   reseteoDePassword: async (req, res) => {
     const { correo } = req.body;
 
-    if (correo.length <= 0 || correo === undefined || correo === null) {
+    if (correo === "" || correo === undefined || correo === null) {
       return res.status(400).json({
         ok: false,
         mensaje: "Debe ingresar su correo"
@@ -676,7 +685,6 @@ module.exports = {
   },
 
     // METODOS NUEVOS PARA FLUTTER
-
   verificarUsuarioRepetido: (req, res, next) => {
 
     const correo  = req.params.correo;
@@ -702,6 +710,7 @@ module.exports = {
       }
     });
   },
+
   verificarPerfilUsuario: (req, res, next) => {
 
    

@@ -7,6 +7,7 @@ module.exports = {
 
     login: (req, res) => {
 
+      console.log(req.body)
         const { correo, password} = req.body;
 
         if (correo.length <= 0 || correo === undefined || correo === null) {
@@ -52,7 +53,8 @@ module.exports = {
             //DATOS QUE SE ENVIAN AL GENERAR EL TOKEN
             payload= {
               _id: usuarioDB._id,
-              nombre: usuarioDB.nombre,
+              rol: usuarioDB.rol
+              /*nombre: usuarioDB.nombre,
               apellido: usuarioDB.apellido,
               cedula: usuarioDB.cedula,
               movil: usuarioDB.movil,
@@ -60,7 +62,7 @@ module.exports = {
               correo: usuarioDB.correo,
               imagen: usuarioDB.imagen,
               estado: usuarioDB.estado,
-              rol: usuarioDB.rol
+              rol: usuarioDB.rol*/
             }
     
     
@@ -82,7 +84,7 @@ module.exports = {
                 mensaje: 'Login correcto',
                 token: tokenUsuario,
                 menu: obtenerMenu(payload.rol),
-                id: usuarioDB._id
+                //id: usuarioDB._id
               });
         });
     }
@@ -113,9 +115,9 @@ function obtenerMenu(ROL){
     submenu: [
       { titulo: ' Dashboard', url: '/dashboard' },
       { titulo: ' Gestión de Inmuebles ', url: '/inmuebles' },
-      { titulo: ' Gestión de visitas ', url: '/visitas' },
+      { titulo: ' Gestión de Visitas ', url: '/visitas' },
       { titulo: ' Gestión de Contratos de Alquiler ', url: '/vercontrato' },
-      { titulo: ' Alquilar inmueble ', url: '/publicados' }
+      { titulo: ' Alquilar Inmueble ', url: '/publicados' }
     ],
   };
 
@@ -134,7 +136,7 @@ function obtenerMenu(ROL){
     icono: 'mdi mdi-account-settings-variant',
     submenu: [
       //{ titulo: 'Usuarios', url: '/usuarios' },
-      { titulo: 'Servicios', url: '/servicios' }
+      { titulo: 'Gestión de Servicios', url: '/servicios' }
     ]
   };
 
@@ -143,7 +145,7 @@ function obtenerMenu(ROL){
     icono: 'mdi mdi-message',
     submenu: [
       //{ titulo: 'Usuarios', url: '/usuarios' },
-      { titulo: 'Mensajes', url: '/mensajes' }
+      { titulo: 'Gestión de Mensajes', url: '/mensajes' }
     ]
   };
 

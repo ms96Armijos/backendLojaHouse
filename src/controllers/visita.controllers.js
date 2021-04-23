@@ -30,9 +30,7 @@ module.exports = {
               errors: err,
             });
           }
-
-
-
+          
           visitaModel.countDocuments({ 
             $and: [
               { inmueble: { $in: inmueble }  },
@@ -172,7 +170,7 @@ module.exports = {
         });
       }
 
-      if(usuarioEncontrado.rol == 'ARRENDADOR'){
+      if(usuarioEncontrado.rol == 'ARRENDADOR' || usuarioEncontrado.rol == 'ADMINISTRADOR'){
         return res.status(400).json({
           ok: false,
           mensaje: "No se puede solicitar la visita, debe ser un usuario arrendatario",
@@ -373,7 +371,7 @@ module.exports = {
       .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula')
       .populate('inmueble')
       .skip(desde)
-      .limit(5)
+      .limit(6)
       .exec((err, visitas) => {
         if (err) {
           return res.status(500).json({
@@ -395,6 +393,57 @@ module.exports = {
             return res.status(500).json({
               ok: false,
               mensaje: "Error contando usuarios",
+              errors: err,
+            });
+          }
+
+          res.status(200).json({
+            ok: true,
+            visitas: visitas,
+            total: conteo
+          });
+        });
+      });
+  },
+
+   //QUEDA PENDIENTE PARA REVISARLO CUANDO ESTÉ EL TOKEN
+   obtenerVisitasSolicitadasMovil: (req, res, next) => {
+
+    let desde = req.params.desde;
+    desde = Number(desde);
+
+   visitaModel.find({ 
+      $and: [
+       { usuarioarrendatario: { $in: req.usuario._id } },
+        { estado: { $ne: 'ELIMINADA' } },
+      ]
+      
+       })
+      .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula')
+      .populate('inmueble')
+      //.skip(desde)
+      //.limit(6)
+      .exec((err, visitas) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            mensaje: "Error cargando visita",
+            errors: err,
+          });
+        }
+
+
+        visitaModel.countDocuments({ 
+          $and: [
+            { usuarioarrendatario: { $in: req.usuario._id } },
+            { estado: { $ne: 'ELIMINADA' } },
+            ]
+         }, (err, conteo) => {
+
+          if (err) {
+            return res.status(500).json({
+              ok: false,
+              mensaje: "Error contando visitas",
               errors: err,
             });
           }

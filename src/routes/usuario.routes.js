@@ -2,6 +2,7 @@ const express = require('express');
 var mdwVerificarToken = require('../middlewares/autenticacion');
 const router = express();
 
+
 const { 
     obtenerUsuarios,
     obtenerUsuarioEspecifico, 
@@ -16,11 +17,10 @@ const {
     verificarUsuarioRepetido,
     verificarPerfilUsuario,
 } = require('../controllers/usuario.controllers');
-const { validarcedula } = require('../../utils/validarcedula');
 
 
 //OPERACIONES CRUD
-router.post('/crearusuario',crearUsuario);
+router.post('/crearusuario', crearUsuario);
 router.get('/obtenerusuarios/:desde', mdwVerificarToken.verificaToken, obtenerUsuarios);
 //OBTENER USUARIOS DEPENDIENDO EL ROL
 router.get('/obtenerusuarios/roles/:rol/:desde', mdwVerificarToken.verificaToken, obtenerUsuariosArrendadores);

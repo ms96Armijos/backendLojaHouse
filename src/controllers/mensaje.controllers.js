@@ -7,7 +7,7 @@ module.exports = {
         let desde = req.params.desde;
         desde = Number(desde);
       
-        mensajeModel.find({})
+        mensajeModel.find({estado: {$ne: 'ELIMINADO'}})
           .skip(desde)
           .limit(6)
           .exec((err, mensajes) => {
@@ -19,7 +19,7 @@ module.exports = {
               });
             }
             
-            mensajeModel.countDocuments({}, (err, conteo) => {
+            mensajeModel.countDocuments({estado: {$ne: 'ELIMINADO'}}, (err, conteo) => {
              
               if (err) {
                 return res.status(500).json({

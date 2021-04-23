@@ -11,7 +11,8 @@ const {
     obtenerVisitasSolicitadas,
     obtenerVisitaEspecificaArrendatario,
     obtenerVisitaEspecificaArrendador,
-    obtenerVisitasArrendatarioAdministrador
+    obtenerVisitasArrendatarioAdministrador,
+    obtenerVisitasSolicitadasMovil
 } = require('../controllers/visita.controllers')
 
 //SE OBTIENE SOLO LAS VISITAS A LOS INMUEBLES DEL ARRENDADOR
@@ -31,6 +32,7 @@ router.put('/arrendador/aceptarvisita/:id', aceptarVisita);
 
 //RUTA PARA OBTENER TODAS LAS VISITAS QUE EL USUARIO ARRENDATARIO HA SOLICITADO
 router.get('/arrendatario/visitasolicitada/:desde', mdwVerificarToken.verificaToken, obtenerVisitasSolicitadas);
+router.get('/arrendatario/visitasolicitadamovil', mdwVerificarToken.verificaToken, obtenerVisitasSolicitadasMovil);
 //RUTAS DEL USUARIO ARRENDATARIO PARA LAS VISITAS
 router.get('/arrendatario/obtenervisita/:id', mdwVerificarToken.verificaToken, obtenerVisitaEspecificaArrendatario);
 router.get('/arrendador/obtenervisita/:id', mdwVerificarToken.verificaToken, obtenerVisitaEspecificaArrendador);

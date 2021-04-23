@@ -1,13 +1,33 @@
 const Notification = require('../../notifications/notifications');
+const { mongo: { usuarioModel } } = require("../../databases");
 module.exports = {
 
-    enviarUnaNotificacion: (req, res, next) => {
-      const data = {
-        tokenId: "ekV3E5IPRiqxfe8EePE8JL:APA91bFJ8_CFdeCoRshFvreu6unyK7hv_0EbZrzJrPPbavyaJgPDAtlkGtWsxBEQEKt0vMbIrBn8LQG3TP2tvlVVissnukBkhOo9BCOJJ8jy7C_yAssjeO9TKN3rVwUBEzxaRXTy96nm",
-        titulo: "Mensaje one to one",
-        mensaje: "A un user"
-      }
-      Notification.sendPushToOneUser(data);
+    enviarUnaNotificacion: async(req, res, next) => {
+
+      let inmueble = req.params.inmueble;
+
+      await usuarioModel
+      .find({ rol: { $in: 'ARRENDATARIO' }}, "tokenfirebase")
+      .exec((err, usuarios) => {
+        
+        for (let i = 0; i < usuarios.length; i++) {
+          const element = usuarios[i].tokenfirebase;
+          if(element){
+            console.log('hola: '+element)
+            const data = {
+              //tokenId: "fZPNNYfBRCeVsHLQPom5e-:APA91bGK8lfvpVxJdoZcu3_3Un0iemfOv1exTFzA4bfkRBTkJd69IzdiK6P0YmZOmtPATqnYG4s2JrihUkK_yz9QPl7X2rDHO1mQik2zrsNsDC67_fdzV4c47HgelLnBOqvg7VT-Gb_Q",
+              tokenId: element,
+              titulo: "Se ha publicado un inmueble en LojaHouse",
+              mensaje: inmueble,
+            }
+            Notification.sendPushToOneUser(data);
+          
+          }
+        }
+        res.status(200).json({
+          ok: true,
+        });
+      })
       },
 
     enviarNotificacionesAMuchos: async(req, res) => {

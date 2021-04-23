@@ -29,7 +29,10 @@ module.exports = {
         }
 
         contratoModel.countDocuments(
-          { usuarioarrendador: req.usuario._id },
+          { $or: [
+            { usuarioarrendador: { $in: req.usuario._id } },
+            { usuarioarrendatario: { $in: req.usuario._id } },
+          ], },
           (err, conteo) => {
             if (err) {
               return res.status(500).json({
@@ -174,6 +177,12 @@ module.exports = {
           errors: "El contrato debe por lo menos ser de un mes",
         });
       }
+      }else{
+        return res.status(400).json({
+          ok: false,
+          mensaje: "La fecha de inicio debe ser mayor a la fecha de finalización",
+          errors: "La fecha de inicio debe ser mayor a la fecha de finalización",
+        });
       }
   
 
@@ -478,8 +487,6 @@ module.exports = {
     let id = req.params.id;
     const { estado } = req.body;
 
-   
-
     await contratoModel.findById(id, (err, contrato) => {
       if (err) {
         return res.status(500).json({
@@ -497,20 +504,22 @@ module.exports = {
         });
       }
 
+      //VALIDACIÓN CUANDO EL CONTRATO AÚN NO SE TERMINA, SE CAMBIÓ POR LA 
+      //DOBLE CONFIRMACIÓN EN EL FRONT
 
-        var momentB = moment(contrato.fechafin,"YYYY/MM/DD");
+      /*  var momentB = moment(contrato.fechafin,"YYYY/MM/DD");
         var fechaAhora = moment().format('YYYY/MM/DD');
 
         console.log(fechaAhora)
 
-    if (moment(fechaAhora).isBefore(momentB)) {
+          if (moment(fechaAhora).isBefore(momentB)) {
 
-        return res.status(400).json({
-          ok: false,
-          mensaje: "El contrato finaliza la fecha: "+contrato.fechafin,
-          errors: "El contrato finaliza la fecha: "+moment(contrato.fechafin).format('DD/MM/YYYY'),
-        });
-      }
+              return res.status(400).json({
+                ok: false,
+                mensaje: "El contrato finaliza la fecha: "+contrato.fechafin,
+                errors: "El contrato finaliza la fecha: "+moment(contrato.fechafin).format('DD/MM/YYYY'),
+              });
+            }*/
 
 
       
@@ -529,7 +538,7 @@ module.exports = {
         res.status(200).json({
           ok: true,
           contrato: contratoGuardado,
-          mensaje: `La contrato está: ${estado}`,
+          mensaje: `La contrato está: ${contratoGuardado.estado}`,
         });
       });
     });

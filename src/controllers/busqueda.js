@@ -368,8 +368,8 @@ module.exports= {
 
       return new Promise((resolve, reject) => {
         
-        mensajeModel.find({})
-          .or([{ titulo: expresionRegular }, { asunto: expresionRegular }, { estado: expresionRegular }])
+        mensajeModel.find({estado: {$ne: 'ELIMINADO'}})
+          .or([{ estado: expresionRegular }])
           .skip(desde)
           .limit(6)
           .exec((err, mensajes) => {

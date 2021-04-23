@@ -4,7 +4,7 @@ let Schema = mongoose.Schema;
 
 //VERSIONKEY: FALSE PARA QUE NO APAREZCA -V CUANDO SE CREA EL DOCUMENTO
 let servicioSchema = new Schema({
-    nombre: {type: String, required: true, unique: true},
+    nombre: {type: String, required: true, unique: true, minlength: 5, maxlength: 80},
     usuario: {type: Schema.Types.ObjectId, ref: 'Usuario'}
 }, {timestamps: true, versionKey: false}, { collection: 'servicios'});
 

@@ -20,14 +20,14 @@ let usuarioSchema = new Schema({
     nombre: {type: String, required: [true, 'Debe ingresar sus nombres']},
     apellido: {type: String, required: [true, 'Debe ingresar sus apellidos']},
     correo: {type: String, unique: [true, 'El correo debe ser único']},
-    password: {type: String, required: false, minlength: 6},
-    imagen: {type: String, required: false},
-    cedula: {type: String, required: false},
+    password: {type: String},
+    imagen: {type: String},
+    cedula: {type: String},
     movil: {type: String, required: [true, 'Debe ingresar su número de celular']},
-    convencional: {type: String, required: false},
-    estado: {type: String, required:false, default: '1', enum: estadosValidos},
+    convencional: {type: String},
+    estado: {type: String, default: '1', enum: estadosValidos},
     rol: {type: String, required: [true, 'Debes indicar quién eres'], enum: rolesValidos},
-    tokenfirebase: {type: String, required: false},
+    tokenfirebase: {type: String},
 }, {timestamps: true, versionKey: false}, {collection: 'usuarios'});
 
 

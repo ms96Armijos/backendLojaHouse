@@ -40,3 +40,31 @@
 
 //usuario: ti@gmail.com
 //contraseña generada: Tivi1996
+
+//ARRENDATARIO
+//usuario: azul@gmail.com
+//contraseña generada: il00ht
+
+//ARRENDADOR
+//usuario: lanas@gmail.com
+//contraseña generada: Tivi1996
+
+//ARRENDADOR
+//usuario: carfgn@gmail.com
+//contraseña generada: FWFllX
+
+//ARRENDADOR
+//lanayo@gmail.com
+//contraseña generada: Tivi1996
+
+//ARRENDATARIO
+//usuario: calor@gmail.com
+//contraseña generada: C6vTn6
+
+//ARRENDATARIO
+//usuario: diez@gmail.com
+//contraseña generada: xU0wpw
+
+//ARRENDATARIO
+//usuario: h@gmail.com
+//contraseña generada: Tivi1996
