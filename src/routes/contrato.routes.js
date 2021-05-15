@@ -8,20 +8,25 @@ const {
     crearContrato, 
     actualizarContrato, 
     eliminarContrato,
-    aceptarAcuerdo,
+    aceptarContrato,
     estadoContrato,
     contratoarrendatario,
     contratoarrendatariomovil,
-    obtenerContratosArrendatarioAdministrador
+    obtenerContratosArrendatarioAdministrador,
+    cargarContratosPendientesDeAceptar
 } = require('../controllers/contrato.controllers')
 
 
 router.get('/obtenercontratos/:desde', mdwVerificarToken.verificaToken, obtenerContratos);
+router.get('/obtenercontratos-contador', mdwVerificarToken.verificaToken, cargarContratosPendientesDeAceptar);
+
+
+
 router.get('/obtenercontrato/:id', mdwVerificarToken.verificaToken, obtenerContrato);
 router.post('/crearcontrato', mdwVerificarToken.verificaToken,crearContrato);
 router.put('/actualizarcontrato/:id', mdwVerificarToken.verificaToken,actualizarContrato);
 router.delete('/eliminarcontrato/:id', mdwVerificarToken.verificaToken,eliminarContrato);
-router.put('/acuerdo/:id/aceptar', mdwVerificarToken.verificaToken, aceptarAcuerdo);
+router.put('/acuerdo/:id/aceptar', mdwVerificarToken.verificaToken, aceptarContrato);
 router.put('/:id/estado', mdwVerificarToken.verificaToken, estadoContrato);
 
 router.get('/arrendatario/obtenercontratos/:desde', mdwVerificarToken.verificaToken, contratoarrendatario);

@@ -90,6 +90,7 @@ function subirFotoPorTipo(tipo, id, nombreArchivo, res) {
   if (tipo === 'usuarios') {
     usuarioModel.findById(id, (err, usuario) => {
 
+      console.log(usuario.password)
       if (!usuario) {
         return res.status(400).json({
           ok: true,
@@ -110,6 +111,7 @@ function subirFotoPorTipo(tipo, id, nombreArchivo, res) {
       console.log('nueva foto ' + usuario.imagen);
       usuario.save((err, usuarioActualizado) => {
         usuarioActualizado.password = ':)';
+        console.log(usuarioActualizado)
         return res.status(200).json({
           ok: true,
           mensaje: "Imagen de usuario actualizada",

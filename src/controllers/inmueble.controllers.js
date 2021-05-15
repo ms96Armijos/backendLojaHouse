@@ -490,8 +490,9 @@ module.exports = {
             });
           }
           res.status(200).json({
-            inmuebles: inmuebles
+            inmuebles: inmuebles,
           });
         });
   },
+
 }

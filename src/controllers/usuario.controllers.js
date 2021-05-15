@@ -1,9 +1,11 @@
-const { mongo: { usuarioModel, inmuebleModel } } = require("../../databases");
+const {
+  mongo: { usuarioModel, inmuebleModel },
+} = require("../../databases");
 let bcrypt = require("bcryptjs");
 let generarPassword = require("generate-password");
 let nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
 const { validarcedula } = require("../../utils/validarcedula");
-const mailer = require('../middlewares/enviarcorreo');
 
 module.exports = {
   //FUNCIÓN PARA OBTENER TODOS LOS USUARIOS REGISTRADOS
@@ -12,7 +14,10 @@ module.exports = {
     desde = Number(desde);
 
     usuarioModel
-      .find({ _id: { $ne: req.usuario } }, "nombre apellido correo imagen movil estado rol")
+      .find(
+        { _id: { $ne: req.usuario } },
+        "nombre apellido correo imagen movil estado rol"
+      )
       .skip(desde)
       .limit(6)
       .exec((err, usuarios) => {
@@ -24,21 +29,24 @@ module.exports = {
           });
         }
 
-        usuarioModel.countDocuments({ _id: { $ne: req.usuario } }, (err, conteo) => {
-          if (err) {
-            return res.status(500).json({
-              ok: false,
-              mensaje: "Error contando usuarios",
-              errors: err,
+        usuarioModel.countDocuments(
+          { _id: { $ne: req.usuario } },
+          (err, conteo) => {
+            if (err) {
+              return res.status(500).json({
+                ok: false,
+                mensaje: "Error contando usuarios",
+                errors: err,
+              });
+            }
+
+            res.status(200).json({
+              ok: true,
+              usuarios: usuarios,
+              total: conteo,
             });
           }
-
-          res.status(200).json({
-            ok: true,
-            usuarios: usuarios,
-            total: conteo,
-          });
-        });
+        );
       });
   },
 
@@ -46,7 +54,10 @@ module.exports = {
     let id = req.params.id;
 
     await usuarioModel
-      .findById(id, "nombre apellido correo cedula imagen movil convencional estado rol")
+      .findById(
+        id,
+        "nombre apellido correo cedula imagen movil convencional estado rol"
+      )
       .exec((err, usuario) => {
         if (err) {
           return res.status(500).json({
@@ -82,25 +93,25 @@ module.exports = {
         mensaje: "Debe ingresar sus nombres",
       });
     }
-    if ( apellido === undefined || apellido === null || apellido.length <= 0 ) {
+    if (apellido === undefined || apellido === null || apellido.length <= 0) {
       return res.status(400).json({
         ok: false,
         mensaje: "Debe ingresar sus apellidos",
       });
     }
-    if ( correo === undefined || correo === null || correo.length <= 0 ) {
+    if (correo === undefined || correo === null || correo.length <= 0) {
       return res.status(400).json({
         ok: false,
         mensaje: "Debe ingresar su correo",
       });
     }
-    if ( movil === undefined || movil === null || movil.length <= 0 ) {
+    if (movil === undefined || movil === null || movil.length <= 0) {
       return res.status(400).json({
         ok: false,
         mensaje: "Debe ingresar su número de celular",
       });
     }
-    if ( rol === undefined || rol === null || rol.length <= 0 ) {
+    if (rol === undefined || rol === null || rol.length <= 0) {
       return res.status(400).json({
         ok: false,
         mensaje: "Debes identificarte (arrendador o arrendatario)",
@@ -125,45 +136,40 @@ module.exports = {
         });
 
         //DESDE AQÍ EMPIEZA LA GENERACIÓN DE LA CONTRASEÑA Y EL ENVÍO DEL CORREO ELECTRÓNICO
-        /* let transporter = nodemailer.createTransport({
-           service: "Gmail",
-           auth: {
-             user: "testplagios@gmail.com",
-             pass: "plagios123",
-           },
-           debug: true, // show debug output
-           logger: true, // log information in console
-         });
-       
-         // Definimos el email
-         let mailOptions = {
-           from: "testplagios@gmail.com",
-           to: correo,
-           subject: "Generación de contraseña",
-           html: `
-         <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
-           <tr height="200px">
-             <td bgcolor="" width="600"px>
-               <h1 style="color: #fff; text-align:center">Bienvenido ${nombre +
-                 " " +
-                 apellido}</h1>
-               <p style="color:#fff; text-align:center">
-                 <span style:"color: #e84393">Tu contraseña temporal es: ${passwordGenerada}</span>
-               </p>
-             </td>
-           </tr>
-       
-           <tr bgcolor="#fff">
-             <td style="text-align:center">
-               <p style="color:#000"><a href="www.google.com">Inicia Sesión en LojaHouse</a></p>
-             </td>
-           </tr>
-       
-         </table>
-         `,
-         };*/
+        const transporter = nodemailer.createTransport(
+          sendgridTransport({
+            auth: {
+              api_key: process.env.API_KEY_SENDGRID,
+            },
+          })
+        );
 
-          //SE CREA EL NUEVO OBJETO DE TIPO USUARIO Y SE ASIGNA LOS VALORES O LA DATA OBTENIDA EN LA PETICIÓN
+        // Definimos el email
+        let mailOptions = {
+          to: correo,
+          from: "corp.lojahouse@gmail.com",
+          subject: "Probando sendGrid",
+          html: `
+        <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
+          <tr height="200px">
+            <td bgcolor="" width="600"px>
+              <h1 style="color: #fff; text-align:center">Bienvenido</h1>
+              <p style="color:#fff; text-align:center">
+                <span style:"color: #e84393">Tu contraseña temporal es: ${passwordGenerada}</span>
+              </p>
+            </td>
+          </tr>
+      
+          <tr bgcolor="#fff">
+            <td style="text-align:center">
+              <p style="color:#000"><a href="www.google.com">Inicia Sesión en LojaHouse</a></p>
+            </td>
+          </tr>
+      
+        </table>
+        `,
+        };
+        //SE CREA EL NUEVO OBJETO DE TIPO USUARIO Y SE ASIGNA LOS VALORES O LA DATA OBTENIDA EN LA PETICIÓN
         let usuario = new usuarioModel({
           nombre,
           apellido,
@@ -176,8 +182,6 @@ module.exports = {
 
         console.log("usuario: " + correo);
         console.log("contraseña generada: " + passwordGenerada);
-        /**LLAMO AL MIDDLEWARE PARA NO TENER Q ESCRIBIR TODO ESE CODIGO */
-       // mailer.enviar_mail(passwordGenerada);
 
         //GUARDO EL USUARIO EN LA BASE DE DATOS
         usuario.save((err, usuarioGuardado) => {
@@ -189,26 +193,21 @@ module.exports = {
             });
           }
 
-
-          
           //ENVÍO EL CORREO LUEGO DE HABER CREADO EL USUARIO EXITOSAMENTE
           // Enviamos el email
-          /* transporter.sendMail(mailOptions, function(error, info) {
-             if (error) {
-               return console.log(error);
-             } else {
-               console.log(
-                 "Correo Electrónico enviado satisfactoriamente: ",
-                 req.body.nombre
-               );
-               return res.status(200).json(req.body);
-             }
-           }); */
-
-          return res.status(201).json({
-            ok: true,
-            mensaje: `Usuario ${nombre + " " + apellido} creado exitosamente`,
-            usuario: usuarioGuardado,
+          transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+              return res.status(500).send({
+                message: "Hola, ha ocurrido un error en el server",
+                error: err,
+              });
+            } else {
+              return res.status(200).send({
+                ok: true,
+                mensaje: `Usuario ${nombre + " " + apellido} creado exitosamente`,
+                usuario: usuarioGuardado,
+              });
+            }
           });
         });
       }
@@ -218,6 +217,7 @@ module.exports = {
   //FUNCIÓN PARA ACTUALIZAR UN USUARIO
   actualizarUsuario: (req, res) => {
     let id = req.params.id;
+    let usuarioCedula
     const { nombre, apellido, cedula, movil, convencional } = req.body;
 
     if (nombre.length <= 0 || nombre === undefined || nombre === null) {
@@ -245,14 +245,13 @@ module.exports = {
       });
     }
 
-    if(!validarcedula(cedula)){
+    if (!validarcedula(cedula)) {
       return res.status(400).json({
         mensaje: "Ingresa una cédula válida",
         ok: false,
         errors: { message: "Ingresa una cédula válida" },
       });
     }
-    
 
     usuarioModel.findById(id, (err, usuario) => {
       if (err) {
@@ -271,13 +270,93 @@ module.exports = {
         });
       }
 
+
+      usuarioModel.find({ cedula: { $in: cedula } }, (err, usuarioConCedula) => {
+
+      
+        if(usuarioConCedula.cedula == cedula){
+          return res.status(400).json({
+            ok: false,
+            mensaje: "Ya existe ese número de cédula",
+            errors: { message: "Ya existe ese número de cédula" },
+          });
+        }
+
       usuario.nombre = nombre;
       usuario.apellido = apellido;
       usuario.cedula = cedula;
       usuario.movil = movil;
       usuario.convencional = convencional;
 
-       usuario.save((err, usuarioGuardado) => {
+
+      /*usuario.updateOne({ _id: id }, req.body, (err, usuarioGuardado) => {
+        if (err) {
+          return res.status(400).json({
+            ok: false,
+            mensaje: "Error al actualizar usuario",
+            errors: err,
+          });
+        }
+
+        res.status(200).json({
+          ok: true,
+          usuario: usuarioGuardado,
+        });
+      });*/
+
+
+
+      usuario.save((err, usuarioGuardado) => {
+        if (err) {
+          return res.status(400).json({
+            ok: false,
+            mensaje: "Error al actualizar usuario",
+            errors: err,
+          });
+        }
+
+        res.status(200).json({
+          ok: true,
+          usuario: usuarioGuardado,
+        });
+      });
+      });
+     
+
+    });
+  },
+
+  //FUNCIÓN PARA ACTUALIZAR TOKEN DE FIREBASE-FLUTTER
+  actualizarFirebaseTokenUsuario: (req, res) => {
+    let id = req.params.id;
+    const { tokenfirebase } = req.body;
+
+    console.log("TOKENFCM: " + tokenfirebase);
+
+    usuarioModel.findById(id, (err, usuario) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Error al buscar usuario",
+          errors: err,
+        });
+      }
+
+      if (!usuario) {
+        return res.status(400).json({
+          ok: false,
+          mensaje: "El usuario con el id: " + id + " no existe",
+          errors: { message: "No existe un usuario con ese ID" },
+        });
+      }
+
+      /* if(usuario.tokenfirebase){
+
+        }*/
+
+      usuario.tokenfirebase = tokenfirebase;
+
+      usuario.save((err, usuarioGuardado) => {
         if (err) {
           return res.status(400).json({
             ok: false,
@@ -293,53 +372,6 @@ module.exports = {
       });
     });
   },
-
-    //FUNCIÓN PARA ACTUALIZAR TOKEN DE FIREBASE-FLUTTER
-    actualizarFirebaseTokenUsuario: (req, res) => {
-      let id = req.params.id;
-      const { tokenfirebase } = req.body;
-
-      console.log("TOKENFCM: "+tokenfirebase);
-
-      usuarioModel.findById(id, (err, usuario) => {
-        if (err) {
-          return res.status(500).json({
-            ok: false,
-            mensaje: "Error al buscar usuario",
-            errors: err,
-          });
-        }
-  
-        if (!usuario) {
-          return res.status(400).json({
-            ok: false,
-            mensaje: "El usuario con el id: " + id + " no existe",
-            errors: { message: "No existe un usuario con ese ID" },
-          });
-        }
-
-       /* if(usuario.tokenfirebase){
-
-        }*/
-  
-        usuario.tokenfirebase = tokenfirebase;
-  
-         usuario.save((err, usuarioGuardado) => {
-          if (err) {
-            return res.status(400).json({
-              ok: false,
-              mensaje: "Error al actualizar usuario",
-              errors: err,
-            });
-          }
-  
-          res.status(200).json({
-            ok: true,
-            usuario: usuarioGuardado,
-          });
-        });
-      });
-    },
 
   //FUNCIÓN PARA CAMBIAR CONTRASEÑA
   cambiarPassword: (req, res) => {
@@ -416,43 +448,15 @@ module.exports = {
     if (correo === "" || correo === undefined || correo === null) {
       return res.status(400).json({
         ok: false,
-        mensaje: "Debe ingresar su correo"
+        mensaje: "Debe ingresar su correo",
       });
     }
 
-    /*let transporter = nodemailer.createTransport({
-      service: "Gmail",
+    const transporter = nodemailer.createTransport(sendgridTransport({
       auth: {
-        user: "testplagios@gmail.com",
-        pass: "plagios123",
-      },
-    });
-
-    // Definimos el email
-    let mailOptions = {
-      from: "testplagios@gmail.com",
-      to: correo,
-      subject: "Actualización de contraseña",
-      html: `
-      <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
-        <tr height="200px">
-          <td bgcolor="" width="600"px>
-            <h1 style="color: #fff; text-align:center">Se ha actualizado la contraseña del usuario: ${correo}</h1>
-            <p style="color:#fff; text-align:center">
-              <span style:"color: #e84393">Tu contraseña temporal es: ${passwordGenerada}</span>
-            </p>
-          </td>
-        </tr>
-    
-        <tr bgcolor="#fff">
-          <td style="text-align:center">
-            <p style="color:#000"><a href="www.google.com">Inicia Sesión en LojaHouse</a></p>
-          </td>
-        </tr>
-    
-      </table>
-      `,
-    };*/
+        api_key: process.env.API_KEY_SENDGRID,
+      }
+    }));
 
     await usuarioModel.findOne({ correo }, async (err, usuario) => {
       if (err) {
@@ -471,18 +475,49 @@ module.exports = {
         });
       }
 
-      if (usuario.estado == '0') {
+      if (usuario.estado == "0") {
         return res.status(400).json({
           ok: false,
-          mensaje: "Se ha desactivado este usuario, comuníquese con el administrador",
-          errors: { message: "Se ha desactivado este usuario, comuníquese con el administrador" },
+          mensaje:
+            "Se ha desactivado este usuario, comuníquese con el administrador",
+          errors: {
+            message:
+              "Se ha desactivado este usuario, comuníquese con el administrador",
+          },
         });
       }
 
       let passwordGenerada = generarPassword.generate({
-        length: 5,
+        length: 6,
         numbers: true,
       });
+
+      // Definimos el email
+    let mailOptions = {
+      to: correo,
+      from: "corp.lojahouse@gmail.com",
+      subject: "Probando sendGrid",
+      html: `
+    <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
+      <tr height="200px">
+        <td bgcolor="" width="600"px>
+          <h1 style="color: #fff; text-align:center">Bienvenido</h1>
+          <p style="color:#fff; text-align:center">
+            <span style:"color: #e84393">Se ha reseteado tu contraseña: ${passwordGenerada}</span>
+          </p>
+        </td>
+      </tr>
+  
+      <tr bgcolor="#fff">
+        <td style="text-align:center">
+          <p style="color:#000"><a href="www.google.com">Inicia Sesión en LojaHouse</a></p>
+        </td>
+      </tr>
+  
+    </table>
+    `
+    }
+
 
       usuario.correo = correo;
       usuario.password = bcrypt.hashSync(passwordGenerada, 10);
@@ -499,24 +534,23 @@ module.exports = {
           });
         }
         usuarioGuardado.password = ";)";
-        res.status(200).json({
-          ok: true,
-          usuario: usuarioGuardado,
-        });
+        
+                // Enviamos el email
+                transporter.sendMail(mailOptions, (err, info) => {
+                  if(err){
+                    res.status(500).send({
+                      message: 'Hola, ha ocurrido un error en el server', 
+                      error: err
+                  });
+                  }else{
+                    res.status(200).send({
+                      ok: true,
+                      usuario: usuarioGuardado,
+                    })
+                  }
+              });
 
-        // Enviamos el email
-        /* transporter.sendMail(mailOptions, function(error) {
-          if (error) {
-            console.log(error);
-            return res.status(200).json(error.message);
-          } else {
-            console.log(
-              "Correo Electrónico enviado satisfactoriamente: ",
-              correo
-            );
-            res.status(200).json(req.body);
-          }
-        });*/
+
       });
     });
   },
@@ -525,6 +559,15 @@ module.exports = {
   desactivarUsuario: (req, res) => {
     let id = req.params.id;
     const { estado } = req.body;
+
+    const transporter = nodemailer.createTransport(
+      sendgridTransport({
+        auth: {
+          api_key: process.env.API_KEY_SENDGRID,
+        },
+      })
+    );
+
 
     usuarioModel.findById(id, async (err, usuario) => {
       if (err) {
@@ -544,9 +587,14 @@ module.exports = {
       }
 
       usuario.estado = estado;
+      let passwordGenerada = generarPassword.generate({
+        length: 6,
+        numbers: true,
+      });
+
+      usuario.password = bcrypt.hashSync(passwordGenerada, 10);
 
       await usuario.save((err, usuarioGuardado) => {
-
         if (err) {
           return res.status(400).json({
             ok: false,
@@ -555,34 +603,113 @@ module.exports = {
           });
         }
 
-
-
         if (usuario.estado === "1") {
+
+           // Definimos el email
+        let mailOptions = {
+          to: usuario.correo,
+          from: "corp.lojahouse@gmail.com",
+          subject: "Probando sendGrid",
+          html: `
+        <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
+          <tr height="200px">
+            <td bgcolor="" width="600"px>
+              <h1 style="color: #fff; text-align:center">Bienvenido</h1>
+              <p style="color:#fff; text-align:center">
+                <span style:"color: #e84393">Se ha reactivado tu cuenta, puedes acceder</span><br>
+                <span style:"color: #e84393">correo: ${usuario.correo}</span><br>
+                <span style:"color: #e84393">contraseña temporal: ${passwordGenerada}</span>
+              </p>
+            </td>
+          </tr>
+      
+          <tr bgcolor="#fff">
+            <td style="text-align:center">
+              <p style="color:#000"><a href="www.google.com">Inicia Sesión en LojaHouse</a></p>
+            </td>
+          </tr>
+      
+        </table>
+        `,
+        };
+
           inmuebleModel.updateMany(
             { usuario: { $in: usuario._id } },
             { publicado: "PUBLICO" },
             { multi: true },
             (err, inmuebleNuevo) => {
-              console.log("hole");
-              return res.status(200).json({
-                ok: true,
-                usuario: usuarioGuardado,
-                mensaje: `Se ha modificado el estado a: ${estado}`
+              console.log("activamoslo" +' '+usuario.correo+ passwordGenerada );
+
+
+                // Enviamos el email
+                usuarioGuardado.password = ':)';
+
+          transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+              return res.status(500).send({
+                message: "Hola, ha ocurrido un error en el server",
+                error: err,
               });
+            } else {
+              return res.status(200).send({
+                ok: true,
+                mensaje: `Se ha modificado el estado a: ${estado}`,
+                usuario: usuarioGuardado,
+              });
+            }
+          });
             }
           );
         }
         if (usuario.estado === "0") {
+
+             // Definimos el email
+        let mailOptions = {
+          to: usuario.correo,
+          from: "corp.lojahouse@gmail.com",
+          subject: "Probando sendGrid",
+          html: `
+        <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
+          <tr height="200px">
+            <td bgcolor="" width="600"px>
+              <h1 style="color: #fff; text-align:center">Bienvenido</h1>
+              <p style="color:#fff; text-align:center">
+                <span style:"color: #e84393">Se ha desactivado tu cuenta, comunícate con el administrador para mayor información</span><br>
+              </p>
+            </td>
+          </tr>
+      
+          <tr bgcolor="#fff">
+            <td style="text-align:center">
+              <p style="color:#000"><a href="www.google.com">Inicia Sesión en LojaHouse</a></p>
+            </td>
+          </tr>
+      
+        </table>
+        `,
+        };
+
           inmuebleModel.updateMany(
             { usuario: { $in: usuario._id } },
             { publicado: "PRIVADO" },
             { multi: true },
             (err, inmuebleNuevo) => {
               console.log("hole");
-              return res.status(200).json({
-                ok: true,
-                usuario: usuarioGuardado,
-                mensaje: `Se ha modificado el estado a: ${estado}`
+
+
+              transporter.sendMail(mailOptions, (err, info) => {
+                if (err) {
+                  return res.status(500).send({
+                    message: "Hola, ha ocurrido un error en el server",
+                    error: err,
+                  });
+                } else {
+                  return res.status(200).send({
+                    ok: true,
+                    mensaje: `Se ha modificado el estado a: ${estado}`,
+                    usuario: usuarioGuardado,
+                  });
+                }
               });
             }
           );
@@ -594,57 +721,67 @@ module.exports = {
   buscarUsuario: async (req, res) => {
     let correo = req.params.correo;
 
-    await usuarioModel.findOne({ correo }, "correo nombre apellido cedula rol", (err, usuario) => {
-      if (err) {
-        return res.status(500).json({
-          ok: false,
-          mensaje: "Error al buscar usuario",
-          errors: err,
+    await usuarioModel.findOne(
+      { correo },
+      "correo nombre apellido cedula rol",
+      (err, usuario) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            mensaje: "Error al buscar usuario",
+            errors: err,
+          });
+        }
+
+        if (!usuario) {
+          return res.status(400).json({
+            ok: false,
+            mensaje: "El usuario con el correo: " + correo + " no existe",
+            errors: { message: "No existe un usuario con ese correo" },
+          });
+        }
+
+        if (usuario._id == req.usuario._id || usuario.rol == "ADMINISTRADOR") {
+          console.log("HOLAAAA: " + usuario._id + "==" + req.usuario._id);
+          return res.status(400).json({
+            ok: false,
+            mensaje: "No se puede asignar el contrato al usuario: " + correo,
+            errors: {
+              message: "No se puede asignar el contrato al mismo dueño",
+            },
+          });
+        }
+
+        if (usuario._id == req.usuario._id || usuario.rol == "ARRENDADOR") {
+          console.log("HOLAAAA: " + usuario._id + "==" + req.usuario._id);
+          return res.status(400).json({
+            ok: false,
+            mensaje: "No se puede asignar el contrato al usuario: " + correo,
+            errors: {
+              message: "No se puede asignar el contrato a un arrendador",
+            },
+          });
+        }
+
+        if (usuario.estado == "0") {
+          return res.status(400).json({
+            ok: false,
+            mensaje:
+              "Se ha desactivado este usuario, comuníquese con el administrador",
+            errors: {
+              message:
+                "Se ha desactivado este usuario, comuníquese con el administrador",
+            },
+          });
+        }
+
+        console.log("GENIAL");
+        res.status(200).json({
+          ok: true,
+          usuario: usuario,
         });
       }
-
-      if (!usuario) {
-        return res.status(400).json({
-          ok: false,
-          mensaje: "El usuario con el correo: " + correo + " no existe",
-          errors: { message: "No existe un usuario con ese correo" },
-        });
-      }
-
-      if (usuario._id == req.usuario._id || usuario.rol == 'ADMINISTRADOR') {
-        console.log('HOLAAAA: ' + usuario._id + '==' + req.usuario._id)
-        return res.status(400).json({
-          ok: false,
-          mensaje: "No se puede asignar el contrato al usuario: "+correo,
-          errors: { message: "No se puede asignar el contrato al mismo dueño" },
-        });
-      }
-
-      if (usuario._id == req.usuario._id || usuario.rol == 'ARRENDADOR') {
-        console.log('HOLAAAA: ' + usuario._id + '==' + req.usuario._id)
-        return res.status(400).json({
-          ok: false,
-          mensaje: "No se puede asignar el contrato al usuario: "+correo,
-          errors: { message: "No se puede asignar el contrato a un arrendador" },
-        });
-      }
-
-
-      if (usuario.estado == '0') {
-        return res.status(400).json({
-          ok: false,
-          mensaje: "Se ha desactivado este usuario, comuníquese con el administrador",
-          errors: { message: "Se ha desactivado este usuario, comuníquese con el administrador" },
-        });
-      }
-
-      console.log('GENIAL')
-      res.status(200).json({
-        ok: true,
-        usuario: usuario,
-      });
-
-    });
+    );
   },
 
   //ADIMINSTRADOR-ARRENDADOR (OBTENER SOLO LOS ARRENDADORES O SOLO ARRRENDATARIOS)
@@ -652,9 +789,13 @@ module.exports = {
     let rol = req.params.rol;
     let desde = req.params.desde;
     desde = Number(desde);
+    let activos=0;
 
     usuarioModel
-      .find({ rol: { $in: rol } }, "nombre apellido correo imagen movil convencional estado rol")
+      .find(
+        { rol: { $in: rol } },
+        "nombre apellido correo imagen movil convencional estado rol"
+      )
       .skip(desde)
       .limit(6)
       .exec((err, usuarios) => {
@@ -666,6 +807,7 @@ module.exports = {
           });
         }
 
+        console.log(activos)
         usuarioModel.countDocuments({ rol: { $in: rol } }, (err, conteo) => {
           if (err) {
             return res.status(500).json({
@@ -684,66 +826,109 @@ module.exports = {
       });
   },
 
-    // METODOS NUEVOS PARA FLUTTER
+  // METODOS NUEVOS PARA FLUTTER
   verificarUsuarioRepetido: (req, res, next) => {
-
-    const correo  = req.params.correo;
+    const correo = req.params.correo;
 
     usuarioModel.find({ correo: correo }, (err, usuarioDB) => {
-
       if (err) {
         return res.status(500).json({
-          mensaje: 'Error al buscar usuario'
+          mensaje: "Error al buscar usuario",
         });
       }
-      if(!usuarioDB){
+      if (!usuarioDB) {
         return res.json({
           status: false,
-          usuario: usuarioDB
-
+          usuario: usuarioDB,
         });
-      }else{
+      } else {
         return res.json({
           status: true,
-          usuario: usuarioDB
+          usuario: usuarioDB,
         });
       }
     });
   },
 
   verificarPerfilUsuario: (req, res, next) => {
+    const correo = req.params.correo;
 
-   
-    const correo  = req.params.correo;
-    
     usuarioModel.findOne({ correo: correo }, (err, usuarioDB) => {
-      
       if (err) {
         return res.status(500).json({
-          mensaje: 'Error al buscar usuario'
+          mensaje: "Error al buscar usuario",
         });
       }
-      if(!usuarioDB){
+      if (!usuarioDB) {
         return res.json({
           ok: false,
-          mensaje: "El usuario "+correo+" no es un arrendatario",
+          mensaje: "El usuario " + correo + " no es un arrendatario",
           errors: { message: "El usuario no es un arrendatario" },
         });
       }
-      
-      if(usuarioDB.rol == 'ADMINISTRADOR'){
+
+      if (usuarioDB.rol == "ADMINISTRADOR") {
         return res.json({
           ok: false,
-          mensaje: "El usuario "+correo+" no es un arrendatario",
+          mensaje: "El usuario " + correo + " no es un arrendatario",
           errors: { message: "El usuario no es un arrendatario" },
         });
-      }
-      else{
+      } else {
         return res.json({
           ok: true,
-          usuario: usuarioDB.rol
+          usuario: usuarioDB.rol,
         });
       }
     });
+  },
+
+//OBTENER CONTADOR DE ARRENDATARIOS PARA EL ADMIN DASHBOARD
+  obtenerUsuariosArrendadoresDasAdmin: (req, res, next) => {
+    let rol = req.params.rol;
+    let totalActivos=0;
+    let totalDesactivados = 0;
+    let totalArrendadores=0;
+
+    usuarioModel
+      .find(
+        { rol: { $in: rol } },
+        "nombre apellido correo imagen movil convencional estado rol"
+      )
+      .exec((err, usuarios) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            mensaje: "Error al obtener todos los usuarios",
+            errors: err,
+          });
+        }
+
+         totalArrendadores = usuarios.length;
+
+        usuarioModel.countDocuments({ $and: [
+          { rol: { $in: rol } },
+          { estado: { $in: '1' } },
+        ] }, (err, conteo) => {
+          if (err) {
+            return res.status(500).json({
+              ok: false,
+              mensaje: "Error contando usuarios",
+              errors: err,
+            });
+          }
+
+           totalActivos = conteo;
+           totalDesactivados = totalArrendadores - conteo;
+
+          console.log('totalArrendadores: '+totalArrendadores)
+          console.log('count: '+conteo)
+
+          res.status(200).json({
+            ok: true,
+            activados: totalActivos,
+            desactivados: totalDesactivados,
+          });
+        });
+      });
   },
 };

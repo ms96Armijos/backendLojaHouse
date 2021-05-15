@@ -195,8 +195,6 @@ module.exports = {
         });
       },
 
-
-
     eliminarMensajes: async(req, res) => {
       let id = req.params.id;
       const { estado } = req.body;
@@ -238,5 +236,36 @@ module.exports = {
           });
         });
       });
+      },
+
+    obtenerMensajesNoLeidos: (req, res, next) => {
+
+        mensajeModel.find({estado: {$ne: 'ELIMINADO'}})
+          .exec((err, mensajes) => {
+            if (err) {
+              return res.status(500).json({
+                ok: false,
+                mensaje: "Error cargando mensajes",
+                errors: err,
+              });
+            }
+            
+            mensajeModel.countDocuments({estado: {$in: 'ENVIADO'}}, (err, conteo) => {
+             
+              if (err) {
+                return res.status(500).json({
+                  ok: false,
+                  mensaje: "Error contando mensajes",
+                  errors: err,
+                });
+              }
+              res.status(200).json({
+                ok: true,
+                total: conteo
+              });
+            });
+      
+      
+          });
       },
 }

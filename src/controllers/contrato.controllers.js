@@ -441,7 +441,7 @@ module.exports = {
       });
   },
 
-  aceptarAcuerdo: async (req, res) => {
+  aceptarContrato: async (req, res) => {
     let id = req.params.id;
     const { acuerdo, estado } = req.body;
 
@@ -542,5 +542,54 @@ module.exports = {
         });
       });
     });
+  },
+
+  cargarContratosPendientesDeAceptar: (req, res, next) => {
+    console.log(req.usuario._id);
+    contratoModel
+      .find({
+        $or: [
+          { usuarioarrendador: { $in: req.usuario._id } },
+          { usuarioarrendatario: { $in: req.usuario._id } },
+        ],
+        $and: [
+          { acuerdo: { $in: 'PENDIENTE' } },
+        ] 
+      })
+      .populate("usuarioarrendatario", "nombre apellido correo")
+      .populate("usuarioarrendador", "nombre apellido correo")
+      .populate("inmueble")
+      .exec((err, contratos) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            mensaje: "Error cargando contrato",
+            errors: err,
+          });
+        }
+
+        contratoModel.countDocuments(
+          { $or: [
+            { usuarioarrendador: { $in: req.usuario._id } },
+            { usuarioarrendatario: { $in: req.usuario._id } },
+          ],
+          $and: [
+            { acuerdo: { $in: 'PENDIENTE' } },
+          ] },
+          (err, conteo) => {
+            if (err) {
+              return res.status(500).json({
+                ok: false,
+                mensaje: "Error contando contratos",
+                errors: err,
+              });
+            }
+            res.status(200).json({
+              ok: true,
+              total: conteo,
+            });
+          }
+        );
+      });
   },
 };

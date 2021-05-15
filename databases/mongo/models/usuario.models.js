@@ -22,12 +22,12 @@ let usuarioSchema = new Schema({
     correo: {type: String, unique: [true, 'El correo debe ser único']},
     password: {type: String},
     imagen: {type: String},
-    cedula: {type: String},
+    cedula: {type: String, unique: [true, 'La cédula debe ser única']},
     movil: {type: String, required: [true, 'Debe ingresar su número de celular']},
     convencional: {type: String},
     estado: {type: String, default: '1', enum: estadosValidos},
     rol: {type: String, required: [true, 'Debes indicar quién eres'], enum: rolesValidos},
-    tokenfirebase: {type: String},
+    tokenfirebase: {type: String, unique: [true, 'El token debe ser único']},
 }, {timestamps: true, versionKey: false}, {collection: 'usuarios'});
 
 

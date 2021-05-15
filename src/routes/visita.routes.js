@@ -12,11 +12,14 @@ const {
     obtenerVisitaEspecificaArrendatario,
     obtenerVisitaEspecificaArrendador,
     obtenerVisitasArrendatarioAdministrador,
-    obtenerVisitasSolicitadasMovil
+    obtenerVisitasSolicitadasMovil,
+    obtenerSolicitudVisitasPendientes
 } = require('../controllers/visita.controllers')
 
 //SE OBTIENE SOLO LAS VISITAS A LOS INMUEBLES DEL ARRENDADOR
 router.get('/obtenervisitas/:desde', mdwVerificarToken.verificaToken, obtenerVisitas);
+//SE OBTIENE SOLO LAS VISITAS A LOS INMUEBLES DEL ARRENDADOR, este es para el dashboard
+router.get('/obtenervisitas-contador', mdwVerificarToken.verificaToken, obtenerSolicitudVisitasPendientes);
 
 //SE OBTIENE SOLO LAS VISITAS A LOS INMUEBLES DEL ARRENDADOR-ADMINISTRADOR
 router.get('/administrador/arrendador/visitas/:desde', mdwVerificarToken.verificaToken, obtenerVisitasArrendatarioAdministrador);

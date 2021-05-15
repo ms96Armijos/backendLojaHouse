@@ -513,4 +513,51 @@ module.exports = {
         })
       })
   },
+
+
+   obtenerSolicitudVisitasPendientes: async (req, res, next) => {
+
+
+    const inmueble = await inmuebleModel.find({ usuario: { $in: req.usuario._id } });
+
+    if (inmueble) {
+      const visita = await visitaModel.find({ 
+        $and: [
+        { inmueble: { $in: inmueble }  },
+         { estado: { $in: 'PENDIENTE' } },
+       ]
+        })
+        .populate('inmueble')
+        .exec((err, visitas) => {
+          if (err) {
+            return res.status(500).json({
+              ok: false,
+              mensaje: "Error cargando visita",
+              errors: err,
+            });
+          }
+          
+          visitaModel.countDocuments({ 
+            $and: [
+              { inmueble: { $in: inmueble }  },
+               { estado: { $in: 'PENDIENTE' } },
+             ]
+           }, (err, conteo) => {
+
+            if (err) {
+              return res.status(500).json({
+                ok: false,
+                mensaje: "Error contando usuarios",
+                errors: err,
+              });
+            }
+
+            res.status(200).json({
+              ok: true,
+              total: conteo
+            });
+          });
+        });
+    }
+  },
 }

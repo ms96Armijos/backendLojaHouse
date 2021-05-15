@@ -16,6 +16,7 @@ const {
     obtenerUsuariosArrendadores,
     verificarUsuarioRepetido,
     verificarPerfilUsuario,
+    obtenerUsuariosArrendadoresDasAdmin,
 } = require('../controllers/usuario.controllers');
 
 
@@ -24,6 +25,9 @@ router.post('/crearusuario', crearUsuario);
 router.get('/obtenerusuarios/:desde', mdwVerificarToken.verificaToken, obtenerUsuarios);
 //OBTENER USUARIOS DEPENDIENDO EL ROL
 router.get('/obtenerusuarios/roles/:rol/:desde', mdwVerificarToken.verificaToken, obtenerUsuariosArrendadores);
+
+//OBTENER CANTIDAD DE ARRENDADORES AL DASHADMIN
+router.get('/obtenerusuarios/roles-contador/:rol/dashadmin', mdwVerificarToken.verificaToken, obtenerUsuariosArrendadoresDasAdmin);
 
 router.get('/obtenerusuario/:id', mdwVerificarToken.verificaToken, obtenerUsuarioEspecifico);
 router.put('/actualizarusuario/:id', mdwVerificarToken.verificaToken, actualizarUsuario);

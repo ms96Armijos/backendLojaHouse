@@ -125,6 +125,7 @@ function obtenerMenu(ROL){
     titulo: 'Arrendatario',
     icono: 'mdi mdi-account-outline',
     submenu: [
+      { titulo: ' Dashboard', url: '/dasharrendatario' },
       { titulo: ' Visitas solicitadas', url: '/visitas-arrendatario' },
       { titulo: ' Contratos de Alquiler ', url: '/contratoarrendatario' },
     ],
@@ -149,14 +150,23 @@ function obtenerMenu(ROL){
     ]
   };
 
+  let menuDashboard = {
+    titulo: 'Dashboard',
+    icono: 'mdi mdi-view-dashboard',
+    submenu:[
+      { titulo: 'Dashboard', url: '/dashadmin' }
+    ]
+  };
+
 
   var menu = [];
   
   if(ROL === 'ADMINISTRADOR'){
-    menu[0] = Object(arrendadorAdministrador);
-    menu[1] = Object(arrendatarioAdministrador);
-    menu[2] = Object(menuMensajes);
-    menu[3] = Object(menu3);
+    menu[0] = Object(menuDashboard);
+    menu[1] = Object(arrendadorAdministrador);
+    menu[2] = Object(arrendatarioAdministrador);
+    menu[3] = Object(menuMensajes);
+    menu[4] = Object(menu3);
   }
   if(ROL === 'ARRENDADOR'){
     menu[0] = Object(menu1);

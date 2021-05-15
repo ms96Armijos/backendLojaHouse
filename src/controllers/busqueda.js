@@ -119,7 +119,6 @@ module.exports= {
       
         promesa.then((data) => {
           res.status(200).json({
-            ok: true,
             [tabla]: data,
           });
         });
@@ -181,7 +180,7 @@ module.exports= {
           console.log('arrendatario')
           inmuebleModel.find({$and: [
             { nombre: { $in: expresionRegular } },
-            { estado: { $in: 'DISPONIBLE' } },
+            { estado: { $in: 'DISPONIBLE' }, estado: {$ne: 'ELIMINADO'} },
           ]})
           .populate("usuario", "nombre apellido correo")
           .exec((err, inmuebles) => {
@@ -305,6 +304,7 @@ module.exports= {
        if(primerPrecio > 0 && segundoPrecio > 0){
          console.log('iguales')
         inmuebleModel.find({})
+        .populate('usuario', 'nombre correo')
         .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio , $lte : segundoPrecio}}])
         .exec((err, inmuebles) => {
           console.log(inmuebles)
@@ -324,6 +324,7 @@ module.exports= {
        else if(primerPrecio == 0 && segundoPrecio > 0){
          console.log('segundo mayor')
         inmuebleModel.find({})
+        .populate('usuario', 'nombre correo')
         .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $lte : segundoPrecio}}])
         .exec((err, inmuebles) => {
           console.log(inmuebles)
@@ -343,6 +344,7 @@ module.exports= {
        else if(primerPrecio > 0 && segundoPrecio == 0){
         console.log('PRIMERO mayor')
        inmuebleModel.find({})
+       .populate('usuario', 'nombre correo')
        .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio}}])
        .exec((err, inmuebles) => {
          console.log(inmuebles)
