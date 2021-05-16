@@ -15,7 +15,7 @@ const conectar = async() => {
     try {
         if(!verificarConexion()){
           console.log('conectándose a la BD')
-          await mongoose.connect('mongodb+srv://plagios123:plagios123@cluster0.x5gj7.mongodb.net/lojahouse?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+          await mongoose.connect('mongodb://plagios123:plagios123@cluster0.x5gj7.mongodb.net/lojahouse?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
         }
         console.log("Base de datos: \x1b[32m%s\x1b[0m","online")
     } catch (error) {
