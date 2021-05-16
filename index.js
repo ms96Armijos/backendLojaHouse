@@ -2,7 +2,7 @@ require('dotenv').config();
 
 //Nested estructuring (revisar ese concepto)
 const { enviromentUtils: { validateRequiredEnvs } } = require('./utils');
-const requiredEnvs = ['PORT', 'mongodb+srv://plagios123:plagios123@cluster0.x5gj7.mongodb.net/lojahouse?retryWrites=true&w=majority'];
+const requiredEnvs = ['3000', 'mongodb+srv://plagios123:plagios123@cluster0.x5gj7.mongodb.net/lojahouse?retryWrites=true&w=majority'];
 const { mongoDBHelpers } = require('./helpers');
 const mongodb = require('./helpers/mongodb');
 validateRequiredEnvs(requiredEnvs);
