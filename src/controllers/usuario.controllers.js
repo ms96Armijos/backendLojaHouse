@@ -198,6 +198,7 @@ module.exports = {
           transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
               return res.status(500).send({
+                ok: false,
                 message: "Hola, ha ocurrido un error en el server",
                 error: err,
               });
