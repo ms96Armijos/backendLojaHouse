@@ -13,7 +13,7 @@ app.use('/public', express.static('public'));
 
 //CORS para permitir la comunicación entre varios servidores
 corsOptions = {
-    origin: "Your FrontEnd Website URL",
+    origin: "https://lojahouse.herokuapp.com",
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   };
 app.use(cors(corsOptions));
