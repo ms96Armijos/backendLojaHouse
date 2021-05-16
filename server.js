@@ -4,11 +4,10 @@ const { port } = require('./config');
 const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
-const mongoose = require('mongoose');
 //let fileUpload = require("express-fileupload");
-  
 
 app.use('/public', express.static('public'));
+
 
 
 //CORS para permitir la comunicación entre varios servidores
