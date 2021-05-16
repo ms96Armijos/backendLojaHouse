@@ -14,7 +14,7 @@ const verificarConexion = () =>{
 const conectar = async() => {
     try {
         if(!verificarConexion()){
-          console.log('conectándose a la BD'+mongoURI)
+          console.log('conectándose a la BD')
           await mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
         }
         console.log("Base de datos: \x1b[32m%s\x1b[0m","online")
