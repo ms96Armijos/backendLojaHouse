@@ -12,7 +12,11 @@ app.use('/public', express.static('public'));
 
 
 //CORS para permitir la comunicación entre varios servidores
-app.use(cors());
+corsOptions = {
+    origin: "Your FrontEnd Website URL",
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  };
+app.use(cors(corsOptions));
 //middleware body-parser desde express
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
