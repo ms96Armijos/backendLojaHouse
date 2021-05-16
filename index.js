@@ -9,6 +9,7 @@ validateRequiredEnvs(requiredEnvs);
 
 
 //función autoejecutable asíncrona
+
 (async () => {
     await mongoDBHelpers.conectar();
     require('./server');
