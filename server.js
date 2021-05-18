@@ -4,9 +4,10 @@ const { port } = require('./config');
 const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
+const path = require('path');
 //let fileUpload = require("express-fileupload");
 
-app.use('/public', express.static('public'));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 
 
