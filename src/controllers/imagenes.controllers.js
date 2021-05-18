@@ -66,6 +66,7 @@ module.exports = {
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
     let path = `./uploads/${tipo}/${nombreArchivo}`;
 
+      console.log('path'+path);
     archivo.mv(path, (err) => {
       if (err) {
         return res.status(500).json({
