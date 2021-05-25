@@ -61,18 +61,18 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
         console.log(req.files[i].path)
         await cloudinary.v2.uploader.upload(req.files[i].path, async(err, imagen) => {
 
-          const generarImagen = {
+          /*const generarImagen = {
             "_id": uuidv4(),
             "url": imagen.url,
             "inmueblei": id,
             "public_id": imagen.public_id
-          };
+          };*/
 
-          /*const newImage = new imagenModel({
+          const newImage = new imagenModel({
             url: imagen.url,
             inmueble: id,
             public_id: imagen.public_id
-          })*/
+          })
           finalImage.push(generarImagen)
         });
         
