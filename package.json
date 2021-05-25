@@ -45,6 +45,7 @@
         "nodemailer-sendgrid-transport": "^0.2.0",
         "postmark": "^2.7.4",
         "rotating-file-stream": "^1.4.6",
+        "uuid": "^8.3.2",
         "xoauth2": "^1.2.0"
     },
     "devDependencies": {

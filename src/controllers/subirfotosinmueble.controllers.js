@@ -3,6 +3,7 @@ let express = require('express'),
   router = express.Router();
 const fs = require('fs-extra');
 const path = require('path');
+import { v4 as uuidv4 } from 'uuid';
 const { mongo: { inmuebleModel, imagenModel } } = require('../../databases');
 
 const cloudinary = require('cloudinary');
@@ -59,12 +60,20 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
          pathsLocal.push(req.files[i].path)
         console.log(req.files[i].path)
         await cloudinary.v2.uploader.upload(req.files[i].path, async(err, imagen) => {
-          const newImage = new imagenModel({
+
+          const generarImagen = {
+            "_id": uuidv4(),
+            "url": imagen.url,
+            "inmueblei": id,
+            "public_id": imagen.public_id
+          };
+
+          /*const newImage = new imagenModel({
             url: imagen.url,
             inmueble: id,
             public_id: imagen.public_id
-          })
-          finalImage.push(newImage)
+          })*/
+          finalImage.push(generarImagen)
         });
         
     }
