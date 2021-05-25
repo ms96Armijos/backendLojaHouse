@@ -3,7 +3,7 @@ let express = require('express'),
   router = express.Router();
 const fs = require('fs-extra');
 const path = require('path');
-import { v4 as uuidv4 } from 'uuid';
+const { v4: uuidv4 } = require('uuid');
 const { mongo: { inmuebleModel, imagenModel } } = require('../../databases');
 
 const cloudinary = require('cloudinary');
@@ -61,18 +61,18 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
         console.log(req.files[i].path)
         await cloudinary.v2.uploader.upload(req.files[i].path, async(err, imagen) => {
 
-          /*const generarImagen = {
+          const generarImagen = {
             "_id": uuidv4(),
             "url": imagen.url,
-            "inmueblei": id,
+            "inmueble": id,
             "public_id": imagen.public_id
-          };*/
+          };
 
-          const newImage = new imagenModel({
+          /*const newImage = new imagenModel({
             url: imagen.url,
             inmueble: id,
             public_id: imagen.public_id
-          })
+          })*/
           finalImage.push(generarImagen)
         });
         
@@ -142,7 +142,7 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
           });
         }
 
-        finalImage.forEach(element => {
+        /*finalImage.forEach(element => {
 
            element.save( (err, img) => {
             
@@ -154,7 +154,7 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
               });
             }
           });
-        });
+        });*/
 
         for (let i = 0; i < pathsLocal.length; i++) {
           await fs.unlink(pathsLocal[i])
@@ -180,36 +180,31 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
     });
   });
 
-
-
-  router.get("/photo/inmueble/:id", async(req, res)=>{
-    let id = req.params.id;
-    await imagenModel.find({ inmueble: { $in: id } }, async (err, imagenes) => {
-      if (err) {
-        return res.status(400).json({
-          ok: false,
-          mensaje: "Error al obtener imágenes",
-          errors: err,
-        });
-      }
-
-      if (!imagenes) {
-        return res.status(400).json({
-          ok: false,
-          mensaje: "No existen imágenes",
-          errors: { message: "No existen imágenes" },
-        });
-      }
-      //console.log(imagenes)
-      res.status(200).json({
-        message: "¡Imágenes obtenidas con éxito!",
-        image: imagenes
+//OBTENER IMAGENES A PARTIR DEL MODELO
+/*router.get("/photo/inmueble/:id", async(req, res)=>{
+  let id = req.params.id;
+  await imagenModel.find({ inmueble: { $in: id } }, async (err, imagenes) => {
+    if (err) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "Error al obtener imágenes",
+        errors: err,
       });
+    }
 
-
+    if (!imagenes) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: "No existen imágenes",
+        errors: { message: "No existen imágenes" },
+      });
+    }
+    res.status(200).json({
+      message: "¡Imágenes obtenidas con éxito!",
+      image: imagenes
     });
-
   });
+});*/
 
 
   /*OBTENER TODAS LAS IMAGENES*/
@@ -241,50 +236,89 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
 
   router.delete("/photo/inmueble/:id", async(req, res)=>{
     let id = req.params.id;
-  
-    imagenModel.findByIdAndDelete(id, async(err, imagenEliminada) => {
+
+    await cloudinary.v2.uploader.destroy(id, (err, result) => {
+      console.log(result); // { result: 'ok' }
+
       if (err) {
         return res.status(500).json({
           ok: false,
-          mensaje: "Error al borrar imágen",
+          mensaje: "Error al eliminar imágen",
           errors: err,
         });
       }
-  
-      if (!imagenEliminada) {
-        return res.status(400).json({
-          ok: false,
-          mensaje: "No existe la imágen con ese ID",
-          errors: { message: "No existe la imágen con ese ID" },
-        });
-      }
-  
-      await cloudinary.v2.uploader.destroy(imagenEliminada.public_id, (err, result) => {
-        console.log(result); // { result: 'ok' }
 
-        if (err) {
-          return res.status(500).json({
-            ok: false,
-            mensaje: "Error al eliminar imágen",
-            errors: err,
-          });
-        }
+      res.status(200).json({
+        ok: true,
+        mensaje: "El inmueble ha sido actualizado correctamente",
+      });
 
-        res.status(200).json({
-          ok: true,
-          image: imagenEliminada,
-          mensaje: "El inmueble ha sido actualizado correctamente",
-        });
-
-        });
-
-    
-    
-    });
+      });
   });
 
 
+
+  
   router.put("/photo-update/:id/inmueble", async(req, res)=>{
+    let id = req.params.id;
+    let pathImagenes = []
+    let pathTemporales = []
+
+    await inmuebleModel.findById(id, async(err, inmuebleEncontrado) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Error al obtener inmueble",
+          errors: err,
+        });
+      }
+
+      
+      if (!inmuebleEncontrado) {
+        return res.status(400).json({
+          ok: false,
+          mensaje: "No existe el inmueble con ese ID",
+          errors: { message: "No existe el inmueble con ese ID" },
+        });
+      }
+
+
+    const posicion = inmuebleEncontrado.imagen.indexOf(id);
+    let elementoEliminado = inmuebleEncontrado.imagen.splice(posicion, 1)
+    console.log(inmuebleEncontrado.imagen)
+    
+
+      //console.log(inmuebleEncontrado)
+
+
+
+      await inmuebleEncontrado.save( async(err, inmuebleGuardado) => {
+        if (err) {
+          return res.status(400).json({
+            ok: false,
+            mensaje: "Error al actualizar el inmueble",
+            errors: err,
+          });
+        }
+        
+        console.log(inmuebleGuardado)
+
+        res.status(200).json({
+          ok: true,
+          inmueble: inmuebleGuardado,
+          mensaje: "El inmueble ha sido actualizado correctamente",
+        });
+      });
+
+    });
+  
+  });
+
+
+
+
+//ELIMINAR EN LA BD LA REFERENCIA A LA IMAGEN (FUNCIOONA CON UN OBJETO)
+  /*router.put("/photo-update/:id/inmueble", async(req, res)=>{
     let id = req.params.id;
     let pathImagenes = []
     let pathTemporales = []
@@ -361,7 +395,7 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
 
 
   
-  });
+  });*/
 
 
 module.exports = router;
