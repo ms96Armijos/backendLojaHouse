@@ -4,6 +4,7 @@ const servicioModel = require('./models/servicio.models');
 const usuarioModel = require('./models/usuario.models');
 const visitaModel = require('./models/visita.models');
 const mensajeModel = require('./models/mensaje.models');
+const imagenModel = require('./models/imagen.models');
 
 //EXPORTO TODOS LOS MODELOS DE MI BASE DE DATOS
 module.exports = { 
@@ -12,5 +13,6 @@ module.exports = {
     servicioModel, 
     usuarioModel, 
     visitaModel,
-    mensajeModel 
+    mensajeModel,
+    imagenModel
 }
