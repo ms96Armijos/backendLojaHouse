@@ -59,7 +59,7 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
         reqFiles.push(url + `/public/inmuebles/${id}/` + req.files[i].filename)
          pathsLocal.push(req.files[i].path)
         console.log(req.files[i].path)
-        await cloudinary.v2.uploader.upload(req.files[i].path, async(err, imagen) => {
+        await cloudinary.v2.uploader.upload(req.files[i].path, { folder : "inmueble/"+id}, async(err, imagen) => {
 
           const generarImagen = {
             "_id": uuidv4(),
@@ -234,12 +234,14 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
   });*/
 
 
-  router.delete("/photo/inmueble/:id", async(req, res)=>{
+  router.delete("/photo/inmueble/:id/:image", async(req, res)=>{
     let id = req.params.id;
+    let image = req.params.image;
 
-    await cloudinary.v2.uploader.destroy(id, (err, result) => {
-      console.log(result); // { result: 'ok' }
+    const url = 'inmueble/'+id+'/'+image
 
+    await cloudinary.v2.uploader.destroy(url, async(err, result) => {
+      //console.log(result);
       if (err) {
         return res.status(500).json({
           ok: false,
@@ -248,10 +250,34 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
         });
       }
 
-      res.status(200).json({
+
+
+      const inmueble = await inmuebleModel.findById(id)
+
+
+        
+      console.log('LENGTH: '+ inmueble.imagen.length)
+      if(inmueble.imagen.length == 0){
+        await cloudinary.v2.api.delete_folder('inmueble/'+id, (err, data) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            mensaje: "Error al eliminar imágen",
+            errors: err,
+          });
+        }
+
+       })
+      }
+
+
+      return res.status(200).json({
         ok: true,
         mensaje: "El inmueble ha sido actualizado correctamente",
       });
+
+
+    
 
       });
   });
@@ -285,7 +311,7 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
 
     const posicion = inmuebleEncontrado.imagen.indexOf(id);
     let elementoEliminado = inmuebleEncontrado.imagen.splice(posicion, 1)
-    console.log(inmuebleEncontrado.imagen)
+    //console.log(inmuebleEncontrado.imagen)
     
 
       //console.log(inmuebleEncontrado)
@@ -301,7 +327,7 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
           });
         }
         
-        console.log(inmuebleGuardado)
+        //console.log(inmuebleGuardado)
 
         res.status(200).json({
           ok: true,

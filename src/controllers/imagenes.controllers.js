@@ -2,6 +2,12 @@ const { mongo: { usuarioModel } } = require("../../databases");
 const path = require('path');
 const fs = require('fs');
 
+const cloudinary = require('cloudinary');
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 
 module.exports = {
@@ -20,7 +26,7 @@ module.exports = {
     }
   },
 
-  actualizarImagen: (req, res, next) => {
+  actualizarImagen: async(req, res, next) => {
     let tipo = req.params.tipo;
     let id = req.params.id;
 
@@ -66,8 +72,10 @@ module.exports = {
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
     let path = `./uploads/${tipo}/${nombreArchivo}`;
 
-      console.log('path'+path);
-    archivo.mv(path, (err) => {
+    
+    
+    archivo.mv(path, async(err) => {
+      
       if (err) {
         return res.status(500).json({
           ok: false,
@@ -75,6 +83,18 @@ module.exports = {
           errors: { message: err },
         });
       }
+      
+      console.log('path: '+path);
+
+      await cloudinary.v2.uploader.upload(path, { folder : "usuario/"+id}, async(err, imagen) => {
+        const generarImagen = {
+          "url": imagen.url,
+          "public_id": imagen.public_id,
+          "pathlocal":  path
+        };
+        console.log('IMG GENERATE: '+generarImagen.public_id)
+        nombreArchivo = generarImagen
+      });
 
       subirFotoPorTipo(tipo, id, nombreArchivo, res);
 
@@ -88,8 +108,12 @@ module.exports = {
 }
 
 function subirFotoPorTipo(tipo, id, nombreArchivo, res) {
+  
   if (tipo === 'usuarios') {
-    usuarioModel.findById(id, (err, usuario) => {
+    usuarioModel.findById(id, async(err, usuario) => {
+
+
+
 
       console.log(usuario.password)
       if (!usuario) {
@@ -100,17 +124,34 @@ function subirFotoPorTipo(tipo, id, nombreArchivo, res) {
         });
       }
 
+        for (let i = 0; i < usuario.imagen.length; i++) {
+          let url =  usuario.imagen[i].public_id
+        console.log('url: '+usuario.imagen[i].url)
+        await cloudinary.v2.uploader.destroy(url, async(err, result) => {
+          
+          })
+          
+        }
+
       let pathViejo = './uploads/usuarios/' + usuario.imagen;
       console.log('imagen ' + pathViejo);
       //si existe imagen, la borra
-      if (fs.existsSync(pathViejo)) {
+      //if (fs.existsSync(pathViejo)) {
         console.log('eliminando ' + pathViejo);
-        fs.unlinkSync(pathViejo);
-      }
+        fs.unlinkSync(nombreArchivo.pathlocal);
+     // }
+     
+  
 
       usuario.imagen = nombreArchivo;
       console.log('nueva foto ' + usuario.imagen);
+
+
       usuario.save((err, usuarioActualizado) => {
+
+      
+
+
         usuarioActualizado.password = ':)';
         console.log(usuarioActualizado)
         return res.status(200).json({

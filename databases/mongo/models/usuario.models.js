@@ -21,7 +21,7 @@ let usuarioSchema = new Schema({
     apellido: {type: String, required: [true, 'Debe ingresar sus apellidos']},
     correo: {type: String, unique: [true, 'El correo debe ser único']},
     password: {type: String},
-    imagen: {type: String},
+    imagen: { type: Array},
     cedula: {type: String, unique: [true, 'La cédula debe ser única']},
     movil: {type: String, required: [true, 'Debe ingresar su número de celular']},
     convencional: {type: String},
