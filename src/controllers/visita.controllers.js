@@ -316,7 +316,6 @@ module.exports = {
   aceptarVisita: async (req, res) => {
     let id = req.params.id;
     const { estado } = req.body;
-
     await visitaModel.findById(id, (err, visita) => {
       if (err) {
         return res.status(500).json({
@@ -325,7 +324,6 @@ module.exports = {
           errors: err,
         });
       }
-
       if (!visita) {
         return res.status(400).json({
           ok: false,
@@ -333,10 +331,7 @@ module.exports = {
           errors: { message: "No existe un visita con ese ID" },
         });
       }
-
       visita.estado = estado;
-
-
       visita.save((err, visitaGuardado) => {
         if (err) {
           return res.status(400).json({
@@ -345,7 +340,6 @@ module.exports = {
             errors: err,
           });
         }
-
         res.status(200).json({
           ok: true,
           visita: visitaGuardado,
@@ -461,7 +455,7 @@ module.exports = {
     let id = req.params.id;
 
     visitaModel.findById(id)
-      .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula rol').populate('inmueble')
+     .populate('usuarioarrendatario', 'nombre imagen apellido correo movil cedula rol').populate('inmueble')
       .exec((err, visita) => {
         if (err) {
           return res.status(500).json({
@@ -473,7 +467,7 @@ module.exports = {
         if (!visita) {
           return res.status(400).json({
             ok: false,
-            mensaje: 'El inmueble con el id: ' + id + ' no existe',
+            mensaje: 'La visita con el id: ' + id + ' no existe',
             errors: { message: 'No existe el visita con ese ID' }
           });
         }

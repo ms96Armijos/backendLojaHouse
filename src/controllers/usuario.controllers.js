@@ -497,7 +497,7 @@ module.exports = {
     let mailOptions = {
       to: correo,
       from: "corp.lojahouse@gmail.com",
-      subject: "Probando sendGrid",
+      subject: "Reseteo de contraseña",
       html: `
     <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
       <tr height="200px">
@@ -550,8 +550,6 @@ module.exports = {
                     })
                   }
               });
-
-
       });
     });
   },
@@ -610,7 +608,7 @@ module.exports = {
         let mailOptions = {
           to: usuario.correo,
           from: "corp.lojahouse@gmail.com",
-          subject: "Probando sendGrid",
+          subject: "Nueva contraseña",
           html: `
         <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
           <tr height="200px">

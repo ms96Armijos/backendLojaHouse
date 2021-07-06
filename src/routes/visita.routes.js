@@ -32,7 +32,6 @@ router.put('/eliminarvisita/:id', mdwVerificarToken.verificaToken, eliminarVisit
 //RUTAS DEL USUARIO ARRENDADOR PARA ACEPTAR LAS VISITAS
 router.put('/arrendador/aceptarvisita/:id', aceptarVisita);
 
-
 //RUTA PARA OBTENER TODAS LAS VISITAS QUE EL USUARIO ARRENDATARIO HA SOLICITADO
 router.get('/arrendatario/visitasolicitada/:desde', mdwVerificarToken.verificaToken, obtenerVisitasSolicitadas);
 router.get('/arrendatario/visitasolicitadamovil', mdwVerificarToken.verificaToken, obtenerVisitasSolicitadasMovil);
