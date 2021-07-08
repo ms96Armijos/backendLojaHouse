@@ -305,9 +305,9 @@ module.exports= {
          console.log('iguales')
         inmuebleModel.find({})
         .populate('usuario', 'nombre correo')
+        .and([{ estado: { $ne : 'ELIMINADO'}}, { publicado: { $ne : 'PRIVADO'}}])
         .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio , $lte : segundoPrecio}}])
         .exec((err, inmuebles) => {
-          console.log(inmuebles)
           console.log(inmuebles)
           if (err) {
             reject("Error al cargar Inmuebles", err);
@@ -325,6 +325,7 @@ module.exports= {
          console.log('segundo mayor')
         inmuebleModel.find({})
         .populate('usuario', 'nombre correo')
+        .and([{ estado: { $ne : 'ELIMINADO'}}, { publicado: { $ne : 'PRIVADO'}}])
         .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $lte : segundoPrecio}}])
         .exec((err, inmuebles) => {
           console.log(inmuebles)
@@ -345,6 +346,7 @@ module.exports= {
         console.log('PRIMERO mayor')
        inmuebleModel.find({})
        .populate('usuario', 'nombre correo')
+       .and([{ estado: { $ne : 'ELIMINADO'}}, { publicado: { $ne : 'PRIVADO'}}])
        .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio}}])
        .exec((err, inmuebles) => {
          console.log(inmuebles)
