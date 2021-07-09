@@ -478,7 +478,7 @@ module.exports = {
   inmueblesPublicosMovil: async (req, res, next) => {
 
 
-      await inmuebleModel.find({ $and: [{ publicado: { $eq: 'PUBLICO' } }, { estado: { $eq: 'DISPONIBLE' } }] })
+      await inmuebleModel.find({ $and: [{ publicado: { $eq: 'PUBLICO' } }, { estado: { $eq: 'DISPONIBLE' } }, { estado: {$ne: 'ELIMINADO'} }] })
         .populate('usuario', 'nombre correo')
         .exec((err, inmuebles) => {
           //console.log(inmuebles);
@@ -495,4 +495,27 @@ module.exports = {
         });
   },
 
+  //BUSCAR INMUEBLES PARA LA PRINCIPAL DE LA MOVIL
+   buscaInmueblePublicoMovil: ( req, res, next) => {
+   
+        let busqueda = req.params.busqueda;
+        let expresionRegular = new RegExp(busqueda, "i");
+
+        inmuebleModel.find({ $and: [{ estado: {$in: 'DISPONIBLE'} }, { estado: {$ne: 'ELIMINADO'} }]})
+        .or([{ tipo: expresionRegular }, { nombre: expresionRegular }])
+        .populate("usuario", "nombre apellido correo _id")
+        .exec((err, inmuebles) => {
+          if (err) {
+            return res.status(500).json({
+              ok: false,
+              mensaje: "Error cargando inmueble",
+              errors: err,
+            });
+          }
+          res.status(200).json({
+            ok: true,
+            inmuebles: inmuebles,
+          });
+        });
+      }
 }

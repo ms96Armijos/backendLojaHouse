@@ -15,6 +15,7 @@ const {
     inmueblesPublicosMovil,
     obtenerinmueblesarrendador,
     eliminarInmuebleDesdeElAdministrador,
+    buscaInmueblePublicoMovil,
     actualizarFotosInmueble
 } = require('../controllers/inmueble.controllers')
 
@@ -35,6 +36,9 @@ router.get('/publicados/arrendador/:desde', mdwVerificarToken.verificaToken, inm
 //RUTA PÚBLICA
 router.get('/inmueblespublicos/:desde',  inmueblesPublicos);
 router.get('/inmuebles/publicos/movil', inmueblesPublicosMovil);
+
+  //BUSCAR INMUEBLES PARA LA PRINCIPAL DE LA MOVIL
+router.get('/buscar/:busqueda', buscaInmueblePublicoMovil);
 
 //RUTA DEL ARRENDADOR
 router.get('/obtenerinmuebles/arrendador/:desde', mdwVerificarToken.verificaToken, obtenerinmueblesarrendador);

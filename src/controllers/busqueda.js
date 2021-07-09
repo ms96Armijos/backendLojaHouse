@@ -292,6 +292,8 @@ module.exports= {
       });
     }
 
+    
+
 
     function buscarInmueblesPrincipal(expresionRegularTipoInmueble, expresionRegularUbicacion, primerPrecio, segundoPrecio) {
 
