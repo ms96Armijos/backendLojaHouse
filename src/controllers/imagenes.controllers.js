@@ -70,6 +70,9 @@ module.exports = {
     let nombreArchivo = `${id}-${new Date().getMilliseconds()}.${extensionArchivo}`;
 
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
+    if(!fs.mkdirsSync( `./uploads/${tipo}`)){
+      fs.mkdirsSync(`./uploads/${tipo}`);
+    }
     let path = `./uploads/${tipo}/${nombreArchivo}`;
 
     
