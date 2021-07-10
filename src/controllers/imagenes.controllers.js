@@ -17,7 +17,7 @@ module.exports = {
     let tipo = req.params.tipo;
     let img = req.params.img;
 
-    let pathImagen = path.resolve(__dirname, `../../uploads/${tipo}/${img}`);
+    let pathImagen = path.resolve(__dirname, `../../public/${tipo}/${img}`);
     if (fs.existsSync(pathImagen)) {
       res.sendFile(pathImagen);
     } else {
@@ -70,12 +70,7 @@ module.exports = {
     let nombreArchivo = `${id}-${new Date().getMilliseconds()}.${extensionArchivo}`;
 
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
-    try {
-        fs.mkdirsSync(`./uploads/${tipo}`);
-    } catch (error) {
-      console.log(error)
-    }
-    let path = `./uploads/${tipo}/${nombreArchivo}`;
+    let path = `./public/${tipo}/${nombreArchivo}`;
 
     
     
@@ -138,7 +133,7 @@ function subirFotoPorTipo(tipo, id, nombreArchivo, res) {
           
         }
 
-      let pathViejo = './uploads/usuarios/' + usuario.imagen;
+      let pathViejo = './public/usuarios/' + usuario.imagen;
       console.log('imagen ' + pathViejo);
       //si existe imagen, la borra
       //if (fs.existsSync(pathViejo)) {
