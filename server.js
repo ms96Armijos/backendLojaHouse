@@ -8,6 +8,7 @@ const path = require('path');
 //let fileUpload = require("express-fileupload");
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 
