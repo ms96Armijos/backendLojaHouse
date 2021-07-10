@@ -71,8 +71,12 @@ module.exports = {
 
     let direccion = './public/usuarios';
 
+  try {
     if (!fs.existsSync(direccion)){
       fs.mkdirSync(direccion);
+  }
+  } catch (error) {
+    
   }
 
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
