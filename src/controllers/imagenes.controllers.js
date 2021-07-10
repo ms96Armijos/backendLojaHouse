@@ -71,9 +71,7 @@ module.exports = {
 
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
     try {
-      if(!fs.mkdirsSync( `./uploads/${tipo}`)){
         fs.mkdirsSync(`./uploads/${tipo}`);
-      }
     } catch (error) {
       console.log(error)
     }
