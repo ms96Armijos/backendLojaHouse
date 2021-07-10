@@ -81,7 +81,7 @@ module.exports = {
           ok: false,
           mensaje: "Error al mover archivo",
           errors: { message: err },
-          path: {path}
+          path: {archivo}
         });
       }
       
