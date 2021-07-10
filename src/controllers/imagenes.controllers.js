@@ -74,7 +74,7 @@ module.exports = {
 
     
     
-     archivo.mv(path, async(err) => {
+    archivo.mv(path, async(err) => {
       
       if (err) {
         return res.status(500).json({
@@ -84,7 +84,7 @@ module.exports = {
         });
       }
       
-      console.log('path moved: '+path);
+      console.log('path: '+path);
 
       await cloudinary.v2.uploader.upload(path, { folder : "usuario/"+id}, async(err, imagen) => {
         const generarImagen = {
