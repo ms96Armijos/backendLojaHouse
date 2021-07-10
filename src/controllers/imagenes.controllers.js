@@ -69,6 +69,12 @@ module.exports = {
     //NOMBRE DEL ARCHIVO PERSONALIZADO
     let nombreArchivo = `${id}-${new Date().getMilliseconds()}.${extensionArchivo}`;
 
+    let direccion = './public/usuarios';
+
+    if (!fs.existsSync(direccion)){
+      fs.mkdirSync(direccion);
+  }
+
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
     let path = `./public/${tipo}/${nombreArchivo}`;
 
@@ -81,7 +87,6 @@ module.exports = {
           ok: false,
           mensaje: "Error al mover archivo",
           errors: { message: err },
-          path: {archivo}
         });
       }
       
