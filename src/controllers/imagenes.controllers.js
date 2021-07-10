@@ -84,7 +84,7 @@ module.exports = {
         });
       }
       
-      console.log('path: '+path);
+      console.log('path moved: '+path);
 
       await cloudinary.v2.uploader.upload(path, { folder : "usuario/"+id}, async(err, imagen) => {
         const generarImagen = {
