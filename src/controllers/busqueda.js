@@ -349,7 +349,7 @@ module.exports= {
        inmuebleModel.find({})
        .populate('usuario', 'nombre correo')
        .and([{ estado: { $ne : 'ELIMINADO'}}, { publicado: { $ne : 'PRIVADO'}}])
-       .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio}}])
+       .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gt : segundoPrecio}}])
        .exec((err, inmuebles) => {
          console.log(inmuebles)
          console.log(inmuebles)
