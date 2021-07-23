@@ -369,8 +369,8 @@ module.exports = {
       if(inmueble.estado == 'ELIMINADO'){
         return res.status(400).json({
           ok: false,
-          mensaje: "No se puede habilitar el inmueble",
-          errors: { message: "No se puede habilitar el inmueble" },
+          mensaje: "No se puede publicar el inmueble",
+          errors: { message: "No se puede publicar el inmueble" },
         });
       }
 
@@ -382,7 +382,7 @@ module.exports = {
         if (err) {
           return res.status(400).json({
             ok: false,
-            mensaje: "Error al actualizar inmueble",
+            mensaje: "Error al publicar inmueble",
             errors: err,
           });
         }
@@ -390,7 +390,7 @@ module.exports = {
         res.status(200).json({
           ok: true,
           inmueble: inmuebleGuardado,
-          mensaje: "Se ha actualizado el inmueble correctamente"
+          mensaje: "Se ha publicado el inmueble correctamente"
         });
       });
     });

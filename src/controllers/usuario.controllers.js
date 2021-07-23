@@ -206,7 +206,7 @@ module.exports = {
               return res.status(200).send({
                 ok: true,
                 mensaje: `Usuario ${nombre + " " + apellido} creado exitosamente`,
-                usuario: usuarioGuardado,
+                //usuario: usuarioGuardado,
               });
             }
           });

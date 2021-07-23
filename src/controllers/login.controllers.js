@@ -7,7 +7,7 @@ module.exports = {
 
     login: (req, res) => {
 
-      console.log(req.body)
+      //console.log(req.body)
         const { correo, password} = req.body;
 
         if (correo.length <= 0 || correo === undefined || correo === null) {
