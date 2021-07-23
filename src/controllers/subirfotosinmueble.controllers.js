@@ -240,6 +240,8 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
 
     const url = 'inmueble/'+id+'/'+image
 
+    console.log(url)
+
     await cloudinary.v2.uploader.destroy(url, async(err, result) => {
       //console.log(result);
       if (err) {
@@ -285,8 +287,9 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
 
 
   
-  router.put("/photo-update/:id/inmueble", async(req, res)=>{
+  router.put("/photo-update/:id/:removeid/inmueble", async(req, res)=>{
     let id = req.params.id;
+    let removeid = req.params.removeid;
     let pathImagenes = []
     let pathTemporales = []
 
@@ -308,10 +311,18 @@ router.put("/actualizar/fotos/inmueble/:id", upload.array('imagen', 6), async (r
         });
       }
 
+      let elementoEliminado = ''
+      
+      //const posicion = inmuebleEncontrado.imagen[i].indexOf(id);
+      //let elementoEliminado = inmuebleEncontrado.imagen.splice(posicion, 1)
+      for (let i = 0; i < inmuebleEncontrado.imagen.length; i++) {
+        if(inmuebleEncontrado.imagen[i]._id == removeid){
+          elementoEliminado = inmuebleEncontrado.imagen.splice(i, 1);
+        }
 
-    const posicion = inmuebleEncontrado.imagen.indexOf(id);
-    let elementoEliminado = inmuebleEncontrado.imagen.splice(posicion, 1)
-    //console.log(inmuebleEncontrado.imagen)
+      }
+
+      //console.log(inmuebleEncontrado.imagen)
     
 
       //console.log(inmuebleEncontrado)
