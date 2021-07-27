@@ -162,7 +162,7 @@ module.exports = {
       
           <tr bgcolor="#fff">
             <td style="text-align:center">
-              <p style="color:#000"><a href="www.google.com">Inicia Sesión en LojaHouse</a></p>
+              <p style="color:#000"><a href="https://frontendlh.web.app/#/login">Inicia Sesión en LojaHouse</a></p>
             </td>
           </tr>
       
@@ -511,7 +511,7 @@ module.exports = {
   
       <tr bgcolor="#fff">
         <td style="text-align:center">
-          <p style="color:#000"><a href="www.google.com">Inicia Sesión en LojaHouse</a></p>
+          <p style="color:#000"><a href="https://frontendlh.web.app/#/login">Inicia Sesión en LojaHouse</a></p>
         </td>
       </tr>
   
@@ -624,7 +624,7 @@ module.exports = {
       
           <tr bgcolor="#fff">
             <td style="text-align:center">
-              <p style="color:#000"><a href="www.google.com">Inicia Sesión en LojaHouse</a></p>
+              <p style="color:#000"><a href="https://frontendlh.web.app/#/login">Inicia Sesión en LojaHouse</a></p>
             </td>
           </tr>
       
