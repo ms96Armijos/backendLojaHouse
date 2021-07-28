@@ -148,7 +148,7 @@ module.exports = {
         let mailOptions = {
           to: correo,
           from: "corp.lojahouse@gmail.com",
-          subject: "Probando sendGrid",
+          subject: "Contraseña para ingresar a LojaHouse",
           html: `
         <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
           <tr height="200px">
@@ -180,8 +180,8 @@ module.exports = {
           rol,
         });
 
-        console.log("usuario: " + correo);
-        console.log("contraseña generada: " + passwordGenerada);
+        //console.log("usuario: " + correo);
+        //console.log("contraseña generada: " + passwordGenerada);
 
         //GUARDO EL USUARIO EN LA BASE DE DATOS
         usuario.save((err, usuarioGuardado) => {
@@ -497,7 +497,7 @@ module.exports = {
     let mailOptions = {
       to: correo,
       from: "corp.lojahouse@gmail.com",
-      subject: "Reseteo de contraseña",
+      subject: "Reseteo de contraseña - LojaHouse",
       html: `
     <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
       <tr height="200px">
@@ -608,7 +608,7 @@ module.exports = {
         let mailOptions = {
           to: usuario.correo,
           from: "corp.lojahouse@gmail.com",
-          subject: "Nueva contraseña",
+          subject: "Nueva contraseña - LojaHouse",
           html: `
         <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
           <tr height="200px">
@@ -666,7 +666,7 @@ module.exports = {
         let mailOptions = {
           to: usuario.correo,
           from: "corp.lojahouse@gmail.com",
-          subject: "Probando sendGrid",
+          subject: "Nueva contraseña - LojaHouse",
           html: `
         <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
           <tr height="200px">

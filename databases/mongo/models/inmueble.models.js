@@ -14,9 +14,9 @@ let publicadoValidos = {
 }
 
 let inmuebleSchema = new Schema({
-    nombre: { type: String, required: [true, 'El nombre del inmueble es necesario'], minlength: 5, maxlength: 100},
+    nombre: { type: String, required: [true, 'El nombre del inmueble es necesario'], minlength: 5, maxlength: 300},
     descripcion: { type: String, required: [true, 'La descripción del inmueble es necesario'], minlength: 5, maxlength: 500},
-    direccion: { type: String, required: [true, 'La dirección del inmueble es necesario'], minlength: 5, maxlength: 250},
+    direccion: { type: String, required: [true, 'La dirección del inmueble es necesario'], minlength: 5, maxlength: 400},
     codigo: { type: String},
     tipo: { type: String, required: [true, 'El tipo de inmueble es necesario'] },
     precioalquiler: { type: Number, required: [true, 'El precio de alquiler es necesario'] },
