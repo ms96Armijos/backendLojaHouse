@@ -36,6 +36,7 @@ const rutaBusqueda = require('./src/routes/busqueda.routes');
 const rutaRenovarToken = require('./src/routes/renovarToken.routes');
 const rutaMensaje = require('./src/routes/mensaje.routes');
 
+
 const rutaEnviarNotificaciones = require('./src/routes/enviar.notificaciones.routes');
 
 
@@ -79,6 +80,7 @@ app.use('/admin/busqueda', rutaAdminBusquedas);
 
 app.use('/emails', rutaEmail);
 app.use('/fotosinmueble', rutaSubirFotosInmueble);
+
 
 
 app.listen(port, () => {
