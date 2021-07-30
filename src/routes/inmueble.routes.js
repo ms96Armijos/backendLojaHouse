@@ -1,6 +1,7 @@
 const express = require('express');
 const mdwVerificarToken = require('../middlewares/autenticacion');
 const router = express();
+const { cacheInit } = require('../../utils/cache');
 
 const { 
     obtenerInmuebles, 
@@ -18,7 +19,7 @@ const {
     buscaInmueblePublicoMovil,
     actualizarFotosInmueble
 } = require('../controllers/inmueble.controllers');
-const { cacheInit } = require('../../utils/cache');
+
 
 //RUTA DEL ADMIN
 router.get('/obtenerinmuebles/:desde', obtenerInmuebles);
