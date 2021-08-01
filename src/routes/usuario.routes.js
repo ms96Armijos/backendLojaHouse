@@ -23,14 +23,14 @@ const {
 
 //OPERACIONES CRUD
 router.post('/crearusuario', crearUsuario);
-router.get('/obtenerusuarios/:desde', cacheInit, mdwVerificarToken.verificaToken, obtenerUsuarios);
+router.get('/obtenerusuarios/:desde',  mdwVerificarToken.verificaToken, obtenerUsuarios);
 //OBTENER USUARIOS DEPENDIENDO EL ROL
-router.get('/obtenerusuarios/roles/:rol/:desde', cacheInit, mdwVerificarToken.verificaToken, obtenerUsuariosArrendadores);
+router.get('/obtenerusuarios/roles/:rol/:desde', mdwVerificarToken.verificaToken, obtenerUsuariosArrendadores);
 
 //OBTENER CANTIDAD DE ARRENDADORES AL DASHADMIN
-router.get('/obtenerusuarios/roles-contador/:rol/dashadmin', cacheInit, mdwVerificarToken.verificaToken, obtenerUsuariosArrendadoresDasAdmin);
+router.get('/obtenerusuarios/roles-contador/:rol/dashadmin', mdwVerificarToken.verificaToken, obtenerUsuariosArrendadoresDasAdmin);
 
-router.get('/obtenerusuario/:id', cacheInit, mdwVerificarToken.verificaToken, obtenerUsuarioEspecifico);
+router.get('/obtenerusuario/:id',  mdwVerificarToken.verificaToken, obtenerUsuarioEspecifico);
 router.put('/actualizarusuario/:id', mdwVerificarToken.verificaToken, actualizarUsuario);
 router.get('/buscarusuario/buscar/:correo', mdwVerificarToken.verificaToken, buscarUsuario);
 

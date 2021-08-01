@@ -18,8 +18,8 @@ const {
 } = require('../controllers/contrato.controllers');
 
 
-router.get('/obtenercontratos/:desde', cacheInit, mdwVerificarToken.verificaToken, obtenerContratos);
-router.get('/obtenercontratos-contador', cacheInit, mdwVerificarToken.verificaToken, cargarContratosPendientesDeAceptar);
+router.get('/obtenercontratos/:desde', mdwVerificarToken.verificaToken, obtenerContratos);
+router.get('/obtenercontratos-contador', mdwVerificarToken.verificaToken, cargarContratosPendientesDeAceptar);
 
 
 
@@ -30,11 +30,11 @@ router.delete('/eliminarcontrato/:id', mdwVerificarToken.verificaToken,eliminarC
 router.put('/acuerdo/:id/aceptar', mdwVerificarToken.verificaToken, aceptarContrato);
 router.put('/:id/estado', mdwVerificarToken.verificaToken, estadoContrato);
 
-router.get('/arrendatario/obtenercontratos/:desde', cacheInit, mdwVerificarToken.verificaToken, contratoarrendatario);
+router.get('/arrendatario/obtenercontratos/:desde',  mdwVerificarToken.verificaToken, contratoarrendatario);
 router.get('/arrendatario/obtenercontratosmovil', mdwVerificarToken.verificaToken, contratoarrendatariomovil);
 
 //ADMINISTRADOR-ARRENDATARIO
-router.get('/administrador/arrendatario/contratos/:desde', cacheInit, mdwVerificarToken.verificaToken, obtenerContratosArrendatarioAdministrador);
+router.get('/administrador/arrendatario/contratos/:desde', mdwVerificarToken.verificaToken, obtenerContratosArrendatarioAdministrador);
 
 
 module.exports = router;

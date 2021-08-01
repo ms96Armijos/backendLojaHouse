@@ -9,7 +9,7 @@ const {
 } = require('../controllers/admin.contratos.controllers');
 
 
-router.get('/obtenercontratos/:desde/:idusuario', cacheInit, mdwVerificarToken.verificaToken, obtenerContratosAdminArrendador);
-router.get('/arrendatario/obtenercontratos/:desde/:idusuario', cacheInit, mdwVerificarToken.verificaToken, obtenerContratosAdminArrendatario);
+router.get('/obtenercontratos/:desde/:idusuario',  mdwVerificarToken.verificaToken, obtenerContratosAdminArrendador);
+router.get('/arrendatario/obtenercontratos/:desde/:idusuario', mdwVerificarToken.verificaToken, obtenerContratosAdminArrendatario);
 
 module.exports = router;

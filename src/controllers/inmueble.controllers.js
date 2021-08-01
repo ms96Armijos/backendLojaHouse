@@ -501,8 +501,8 @@ module.exports = {
         let busqueda = req.params.busqueda;
         let expresionRegular = new RegExp(busqueda, "i");
 
-        inmuebleModel.find({ $and: [{ estado: {$in: 'DISPONIBLE'} }, { estado: {$ne: 'ELIMINADO'} }]})
-        .or([{ tipo: expresionRegular }, { nombre: expresionRegular }])
+        inmuebleModel.find({ $and: [{ estado: {$in: 'DISPONIBLE'} }, { publicado: {$in: 'PUBLICO'} }, { estado: {$ne: 'ELIMINADO'} }]})
+        .or([{ tipo: expresionRegular }, { barrio: expresionRegular },  { direccion: expresionRegular }])
         .populate("usuario", "nombre apellido correo _id")
         .exec((err, inmuebles) => {
           if (err) {
