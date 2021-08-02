@@ -1,7 +1,7 @@
 const firebaseAdmin = require('firebase-admin');
 
 function initFirebase(){
-    const serviceAccount = require('../utils/notificationstesis-firebase-adminsdk-b8kxs-5124cfd1eb.json');
+    const serviceAccount = require('../utils/lhproyecto-86325-firebase-adminsdk-ya2lr-b2d78d8233.json');
     firebaseAdmin.initializeApp({
         credential: firebaseAdmin.credential.cert(serviceAccount)
     });
