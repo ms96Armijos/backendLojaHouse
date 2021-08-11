@@ -19,12 +19,12 @@ const {
 } = require('../controllers/visita.controllers');
 
 //SE OBTIENE SOLO LAS VISITAS A LOS INMUEBLES DEL ARRENDADOR
-router.get('/obtenervisitas/:desde', cacheInit, mdwVerificarToken.verificaToken, obtenerVisitas);
+router.get('/obtenervisitas/:desde', mdwVerificarToken.verificaToken, obtenerVisitas);
 //SE OBTIENE SOLO LAS VISITAS A LOS INMUEBLES DEL ARRENDADOR, este es para el dashboard
-router.get('/obtenervisitas-contador', cacheInit, mdwVerificarToken.verificaToken, obtenerSolicitudVisitasPendientes);
+router.get('/obtenervisitas-contador', mdwVerificarToken.verificaToken, obtenerSolicitudVisitasPendientes);
 
 //SE OBTIENE SOLO LAS VISITAS A LOS INMUEBLES DEL ARRENDADOR-ADMINISTRADOR
-router.get('/administrador/arrendador/visitas/:desde', cacheInit, mdwVerificarToken.verificaToken, obtenerVisitasArrendatarioAdministrador);
+router.get('/administrador/arrendador/visitas/:desde', mdwVerificarToken.verificaToken, obtenerVisitasArrendatarioAdministrador);
 
 //CRUD ARRENDADOR (VISITA)
 router.post('/crearvisita', mdwVerificarToken.verificaToken, crearVisita);
@@ -35,10 +35,10 @@ router.put('/eliminarvisita/:id', mdwVerificarToken.verificaToken, eliminarVisit
 router.put('/arrendador/aceptarvisita/:id', aceptarVisita);
 
 //RUTA PARA OBTENER TODAS LAS VISITAS QUE EL USUARIO ARRENDATARIO HA SOLICITADO
-router.get('/arrendatario/visitasolicitada/:desde', cacheInit, mdwVerificarToken.verificaToken, obtenerVisitasSolicitadas);
-router.get('/arrendatario/visitasolicitadamovil', cacheInit, mdwVerificarToken.verificaToken, obtenerVisitasSolicitadasMovil);
+router.get('/arrendatario/visitasolicitada/:desde', mdwVerificarToken.verificaToken, obtenerVisitasSolicitadas);
+router.get('/arrendatario/visitasolicitadamovil', mdwVerificarToken.verificaToken, obtenerVisitasSolicitadasMovil);
 //RUTAS DEL USUARIO ARRENDATARIO PARA LAS VISITAS
-router.get('/arrendatario/obtenervisita/:id', cacheInit, mdwVerificarToken.verificaToken, obtenerVisitaEspecificaArrendatario);
-router.get('/arrendador/obtenervisita/:id', cacheInit, mdwVerificarToken.verificaToken, obtenerVisitaEspecificaArrendador);
+router.get('/arrendatario/obtenervisita/:id', mdwVerificarToken.verificaToken, obtenerVisitaEspecificaArrendatario);
+router.get('/arrendador/obtenervisita/:id', mdwVerificarToken.verificaToken, obtenerVisitaEspecificaArrendador);
 
 module.exports = router;

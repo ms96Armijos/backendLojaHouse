@@ -40,7 +40,7 @@ router.get('/inmueblespublicos/:desde', cacheInit, inmueblesPublicos);
 router.get('/inmuebles/publicos/movil', inmueblesPublicosMovil);
 
   //BUSCAR INMUEBLES PARA LA PRINCIPAL DE LA MOVIL
-router.get('/buscar/:busqueda', cacheInit, buscaInmueblePublicoMovil);
+router.get('/buscar/:busqueda', buscaInmueblePublicoMovil);
 
 //RUTA DEL ARRENDADOR
 router.get('/obtenerinmuebles/arrendador/:desde', mdwVerificarToken.verificaToken, obtenerinmueblesarrendador);

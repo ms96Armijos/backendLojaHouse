@@ -156,7 +156,7 @@ module.exports = {
        ciudad,
        provincia } = req.body;
 
-    console.log(req.usuario._id)
+    //console.log(req.usuario._id)
     let inmueble = new inmuebleModel({
       nombre,
       descripcion,
