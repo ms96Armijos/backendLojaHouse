@@ -1,5 +1,8 @@
 const { mongo: { visitaModel, inmuebleModel } } = require('../../databases');
 const { usuarioModel } = require('../../databases/mongo');
+let nodemailer = require("nodemailer");
+const sendgridTransport = require("nodemailer-sendgrid-transport");
+
 
 module.exports = {
 
@@ -143,7 +146,6 @@ module.exports = {
         mensaje: "Debe ingresar la descripción de la visita",
       });
     }
-
     let visita = new visitaModel({
       fecha,
       descripcion,
@@ -151,8 +153,51 @@ module.exports = {
       usuarioarrendatario
     });
 
+    await inmuebleModel.findById(inmueble)
+    .populate('usuario', 'nombre correo')
+      .exec((err, inmuebleEncontrado) => {
     
-    await usuarioModel.findById(usuarioarrendatario, (err, usuarioEncontrado) => {
+
+
+
+       usuarioModel.findById(usuarioarrendatario, (err, usuarioEncontrado) => {
+
+
+                //DESDE AQÍ EMPIEZA LA GENERACIÓN DE LA CONTRASEÑA Y EL ENVÍO DEL CORREO ELECTRÓNICO
+                const transporter = nodemailer.createTransport(
+                  sendgridTransport({
+                    auth: {
+                      api_key: process.env.API_KEY_SENDGRID,
+                    },
+                  })
+                );
+        
+                // Definimos el email
+                let mailOptions = {
+                  to: inmuebleEncontrado.usuario.correo,
+                  from: "corp.lojahouse@gmail.com",
+                  subject: "Se notifica que han solicitado una visita a su inmueble publicado en LojaHouse",
+                  html: `
+                <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
+                  <tr height="200px">
+                    <td bgcolor="" width="600"px>
+                      <h1 style="color: #fff; text-align:center">Bienvenido</h1>
+                      <p style="color:#fff; text-align:center">
+                        <span style:"color: #e84393">El usuario ${usuarioEncontrado.nombre} ha solicitado una visita al inmueble: ${inmuebleEncontrado.nombre}</span>
+                      </p>
+                    </td>
+                  </tr>
+              
+                  <tr bgcolor="#fff">
+                    <td style="text-align:center">
+                      <p style="color:#000"><a href="https://frontendlh.web.app/#/login">Inicia Sesión en LojaHouse</a></p>
+                    </td>
+                  </tr>
+              
+                </table>
+                `,
+                };
+
 
       if (err) {
         return res.status(500).json({
@@ -161,7 +206,6 @@ module.exports = {
           errors: err,
         });
       }
-
       if (!usuarioEncontrado) {
         return res.status(400).json({
           ok: false,
@@ -169,7 +213,6 @@ module.exports = {
           errors: { message: "No existe un usuario con ese ID" },
         });
       }
-
       if(usuarioEncontrado.rol == 'ARRENDADOR' || usuarioEncontrado.rol == 'ADMINISTRADOR'){
         return res.status(400).json({
           ok: false,
@@ -178,26 +221,43 @@ module.exports = {
         });
       }
 
+ 
+
+
+
        visita.save((err, visitaGuardado) => {
+         
         if (err) {
           return res.status(400).json({
             ok: false,
             mensaje: "Error al crear visita",
             errors: err,
           });
-  
         }
-  
-        res.status(201).json({
-          ok: true,
-          visita: visitaGuardado,
-          mensaje: "Se ha registrado su visita"
-        });
+
+               //ENVÍO EL CORREO LUEGO DE HABER CREADO EL USUARIO EXITOSAMENTE
+          // Enviamos el email
+          transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+              return res.status(500).send({
+                ok: false,
+                message: "Hola, ha ocurrido un error en el server",
+                error: err,
+              });
+            } else {
+              return res.status(201).json({
+                ok: true,
+                visita: visitaGuardado,
+                mensaje: "Se ha registrado su visita"
+              });
+            }
+          });
+          
       });
-
-
     });
 
+
+  });
 
 
   },
@@ -554,4 +614,94 @@ module.exports = {
         });
     }
   },
+
+  eliminarVisitaArrendatario: (req, res) => {
+    let id = req.params.id;
+  
+    visitaModel.findByIdAndRemove(id, (err, visitaBorrada) => {
+      if (err) {
+        return res.status(500).json({
+          ok: false,
+          mensaje: "Error al borrar usuario",
+          errors: err,
+        });
+      }
+
+      inmuebleModel.findById(visitaBorrada.inmueble)
+      .populate('usuario', 'nombre correo')
+      .exec((err, inmuebleEncontrado) => {
+        
+
+        
+                //DESDE AQÍ EMPIEZA LA GENERACIÓN DE LA CONTRASEÑA Y EL ENVÍO DEL CORREO ELECTRÓNICO
+                const transporter = nodemailer.createTransport(
+                  sendgridTransport({
+                    auth: {
+                      api_key: process.env.API_KEY_SENDGRID,
+                    },
+                  })
+                );
+        
+                // Definimos el email
+                let mailOptions = {
+                  to: inmuebleEncontrado.usuario.correo,
+                  from: "corp.lojahouse@gmail.com",
+                  subject: "Se notifica que se han cancenlado una visita a su inmueble publicado en LojaHouse",
+                  html: `
+                <table border="0" cellpadding="0" cellspacing="0" width="600px" background-color="#2d3436" bgcolor="#2d3436">
+                  <tr height="200px">
+                    <td bgcolor="" width="600"px>
+                      <h1 style="color: #fff; text-align:center">Bienvenido</h1>
+                      <p style="color:#fff; text-align:center">
+                        <span style:"color: #e84393">Se ha cancelado la visita solicitada al inmueble: ${inmuebleEncontrado.nombre}</span>
+                      </p>
+                    </td>
+                  </tr>
+              
+                  <tr bgcolor="#fff">
+                    <td style="text-align:center">
+                      <p style="color:#000"><a href="https://frontendlh.web.app/#/login">Inicia Sesión en LojaHouse</a></p>
+                    </td>
+                  </tr>
+              
+                </table>
+                `,
+                };
+
+
+      console.log('MAIL: '+ inmuebleEncontrado.usuario.correo)
+
+
+      if (!visitaBorrada) {
+        return res.status(400).json({
+          ok: false,
+          mensaje: "No existe una visita con ese ID",
+          errors: { message: "No existe una visita con ese ID" },
+        });
+      }
+
+
+             //ENVÍO EL CORREO LUEGO DE HABER CREADO EL USUARIO EXITOSAMENTE
+          // Enviamos el email
+          transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+              return res.status(500).send({
+                ok: false,
+                message: "Hola, ha ocurrido un error en el server",
+                error: err,
+              });
+            } else {
+              return   res.status(200).json({
+                ok: true,
+                servicio: visitaBorrada,
+              });
+            }
+          });
+
+  
+    
+    });
+  });
+  },
+
 }

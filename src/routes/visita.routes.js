@@ -15,7 +15,8 @@ const {
     obtenerVisitaEspecificaArrendador,
     obtenerVisitasArrendatarioAdministrador,
     obtenerVisitasSolicitadasMovil,
-    obtenerSolicitudVisitasPendientes
+    obtenerSolicitudVisitasPendientes,
+    eliminarVisitaArrendatario
 } = require('../controllers/visita.controllers');
 
 //SE OBTIENE SOLO LAS VISITAS A LOS INMUEBLES DEL ARRENDADOR
@@ -29,7 +30,9 @@ router.get('/administrador/arrendador/visitas/:desde', mdwVerificarToken.verific
 //CRUD ARRENDADOR (VISITA)
 router.post('/crearvisita', mdwVerificarToken.verificaToken, crearVisita);
 router.put('/actualizarvisita/:id', mdwVerificarToken.verificaToken, actualizarVisita);
-router.put('/eliminarvisita/:id', mdwVerificarToken.verificaToken, eliminarVisita);
+
+///he cambiado este método eliminar
+router.put('/eliminarvisita/:id', mdwVerificarToken.verificaToken, eliminarVisitaArrendatario);
 
 //RUTAS DEL USUARIO ARRENDADOR PARA ACEPTAR LAS VISITAS
 router.put('/arrendador/aceptarvisita/:id', aceptarVisita);
