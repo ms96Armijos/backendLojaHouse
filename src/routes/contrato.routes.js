@@ -23,7 +23,7 @@ router.get('/obtenercontratos-contador', mdwVerificarToken.verificaToken, cargar
 
 
 
-router.get('/obtenercontrato/:id', cacheInit, mdwVerificarToken.verificaToken, obtenerContrato);
+router.get('/obtenercontrato/:id', mdwVerificarToken.verificaToken, obtenerContrato);
 router.post('/crearcontrato', mdwVerificarToken.verificaToken,crearContrato);
 router.put('/actualizarcontrato/:id', mdwVerificarToken.verificaToken,actualizarContrato);
 router.delete('/eliminarcontrato/:id', mdwVerificarToken.verificaToken,eliminarContrato);

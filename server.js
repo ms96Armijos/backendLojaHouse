@@ -5,11 +5,15 @@ const cors = require('cors');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const path = require('path');
+const compression = require('compression');
+var fs = require('fs');
+
 //let fileUpload = require("express-fileupload");
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-
+// create a write stream (in append mode)
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 
 //CORS para permitir la comunicación entre varios servidores
 app.use(cors());
@@ -17,9 +21,17 @@ app.use(cors());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 //middleware morgan para ver donde navega mi aplicación
-app.use(morgan('dev'));
+// log only 4xx and 5xx responses to console
+app.use(morgan('dev'))
+   
+  // log all requests to access.log
+  app.use(morgan('combined', {
+    stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+  }))
 //middleware para seguridad de mi servidor
 app.use(helmet());
+//compresión
+app.use(compression());
 //para imagenes
 //app.use(fileUpload());
 

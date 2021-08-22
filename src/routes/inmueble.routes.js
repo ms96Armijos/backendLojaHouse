@@ -25,8 +25,8 @@ const {
 router.get('/obtenerinmuebles/:desde', obtenerInmuebles);
 
 //CRUD ARRENDADOR
-router.get('/obtenerinmueble/:id', cacheInit, mdwVerificarToken.verificaToken, obtenerInmueble);
-router.get('/obtenerinmueble/publico/:id', cacheInit, obtenerInmueblePublico);
+router.get('/obtenerinmueble/:id', mdwVerificarToken.verificaToken, obtenerInmueble);
+router.get('/obtenerinmueble/publico/:id', obtenerInmueblePublico);
 router.post('/crearinmueble', mdwVerificarToken.verificaToken, crearInmueble);
 router.put('/actualizarinmueble/:id', mdwVerificarToken.verificaToken, actualizarInmueble);
 router.put('/eliminarinmueble/:id', mdwVerificarToken.verificaToken, eliminarInmueble);
