@@ -348,10 +348,11 @@ module.exports= {
         //REALIZO LA BÚSQUEDA SI SON PRECIOS MAYORES A 200
        else if(primerPrecio > 0 && segundoPrecio == 0){
         console.log('PRIMERO mayor')
+
        inmuebleModel.find({})
        .populate('usuario', 'nombre correo')
        .and([{ estado: { $ne : 'ELIMINADO'}}, { publicado: { $ne : 'PRIVADO'}}])
-       .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gt : segundoPrecio}}])
+       .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gt : primerPrecio}}])
        .exec((err, inmuebles) => {
          console.log(inmuebles)
          console.log(inmuebles)
