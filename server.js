@@ -45,7 +45,6 @@ const rutaContrato = require('./src/routes/contrato.routes');
 const rutaLogin = require('./src/routes/login.routes');
 const rutaImagenes = require('./src/routes/imagenes.routes');
 const rutaBusqueda = require('./src/routes/busqueda.routes');
-const rutaRenovarToken = require('./src/routes/renovarToken.routes');
 const rutaMensaje = require('./src/routes/mensaje.routes');
 
 
@@ -63,7 +62,6 @@ const rutaAdminBusquedas = require('./src/routes/admin.busquedas.routes');
 const rutaSubirFotosInmueble = require('./src/controllers/subirfotosinmueble.controllers');
 
 
-const rutaEmail = require('./src/routes/email.routes');
 
 
 
@@ -77,7 +75,6 @@ app.use('/login', rutaLogin);
 app.use('/img', rutaImagenes);
 app.use('/busqueda', rutaBusqueda);
 
-app.use('/renovar', rutaRenovarToken);
 app.use('/mensaje', rutaMensaje);
 
 app.use('/enviarnotificaciones', rutaEnviarNotificaciones);
@@ -90,7 +87,6 @@ app.use('/admin/contrato', rutaContratosAdminArrendador);
 app.use('/admin/busqueda', rutaAdminBusquedas);
 
 
-app.use('/emails', rutaEmail);
 app.use('/fotosinmueble', rutaSubirFotosInmueble);
 
 
