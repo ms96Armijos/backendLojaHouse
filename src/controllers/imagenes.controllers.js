@@ -139,7 +139,7 @@ function subirFotoPorTipo(tipo, id, nombreArchivo, res) {
         console.log('url: '+usuario.imagen[i].url)
         await cloudinary.v2.uploader.destroy(url, async(err, result) => {
           
-          })
+          });
           
         }
 
