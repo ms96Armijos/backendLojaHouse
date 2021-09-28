@@ -6,14 +6,14 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const path = require('path');
 const compression = require('compression');
-var fs = require('fs');
+//var fs = require('fs');
 
 //let fileUpload = require("express-fileupload");
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // create a write stream (in append mode)
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+//var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 
 //CORS para permitir la comunicación entre varios servidores
 app.use(cors());
@@ -25,9 +25,9 @@ app.use(express.json());
 app.use(morgan('dev'))
    
   // log all requests to access.log
-  app.use(morgan('combined', {
+  /*app.use(morgan('combined', {
     stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
-  }))
+  }))*/
 //middleware para seguridad de mi servidor
 app.use(helmet());
 //compresión
