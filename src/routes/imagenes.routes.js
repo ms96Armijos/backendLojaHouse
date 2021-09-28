@@ -7,7 +7,7 @@ router.use(fileUpload());
 const { 
     obtenerImagen, 
     actualizarImagen
-    } = require('../controllers/imagenes.controllers');
+    } = require('../controllers/imagenes.controllers copy');
 
 //RUTAS QUE SOLO EL ADMINISTRADOR PUEDE ACCEDER
 router.get('/:tipo/:img', obtenerImagen);
