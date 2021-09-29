@@ -5,8 +5,9 @@ const fs = require('fs-extra');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const { mongo: { inmuebleModel, imagenModel } } = require('../../databases');
-
 const cloudinary = require('cloudinary');
+
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
