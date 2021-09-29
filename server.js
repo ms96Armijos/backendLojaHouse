@@ -10,7 +10,16 @@ var fs = require('fs');
 
 //let fileUpload = require("express-fileupload");
 
-app.use('/public', express.static(path.join(__dirname, 'public')));
+const setHeadersOnStatic = (res, path, stat) => {
+  const type = mime.getType(path);
+  res.set('content-type', type);
+}
+
+const staticOptions = {
+  setHeaders: setHeadersOnStatic
+}
+
+app.use('/public', express.static(path.join(__dirname, 'public'), staticOptions));
 
 // create a write stream (in append mode)
 var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
