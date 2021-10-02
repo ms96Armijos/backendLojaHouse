@@ -1,7 +1,6 @@
 const express = require('express');
 const mdwVerificarToken = require('../middlewares/autenticacion');
 const router = express();
-const { cacheInit } = require('../../utils/cache');
 
 const { 
     obtenerInmuebles, 
@@ -36,7 +35,7 @@ router.put('/desactivarinmueble/:id', mdwVerificarToken.verificaToken, desactiva
 router.get('/publicados/arrendador/:desde',  mdwVerificarToken.verificaToken, inmueblesPublicadosPorArrendador);
 
 //RUTA PÚBLICA
-router.get('/inmueblespublicos/:desde', cacheInit, inmueblesPublicos);
+router.get('/inmueblespublicos/:desde', inmueblesPublicos);
 router.get('/inmuebles/publicos/movil', inmueblesPublicosMovil);
 
   //BUSCAR INMUEBLES PARA LA PRINCIPAL DE LA MOVIL

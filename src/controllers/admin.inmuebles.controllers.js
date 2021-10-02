@@ -16,6 +16,7 @@ module.exports = {
       .populate('usuario', 'nombre correo rol imagen')
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, inmuebles) => {
         if (err) {
           return res.status(500).json({
@@ -52,6 +53,7 @@ module.exports = {
 
     await inmuebleModel.findById(id)
       .populate('usuario', 'nombre imagen correo estado rol')
+      .sort({'updatedAt': -1})
       .exec((err, inmueble) => {
         if (err) {
           return res.status(500).json({

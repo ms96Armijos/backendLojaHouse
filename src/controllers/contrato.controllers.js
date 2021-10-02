@@ -19,6 +19,7 @@ module.exports = {
       .populate("inmueble")
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, contratos) => {
         if (err) {
           return res.status(500).json({
@@ -63,6 +64,7 @@ module.exports = {
       .populate("inmueble")
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, contratos) => {
         if (err) {
           return res.status(500).json({
@@ -369,6 +371,7 @@ module.exports = {
       .populate("inmueble")
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, contratos) => {
         if (err) {
           return res.status(500).json({
@@ -409,6 +412,7 @@ module.exports = {
       .populate("usuarioarrendatario", "nombre apellido correo")
       .populate("usuarioarrendador", "nombre apellido correo")
       .populate("inmueble")
+      .sort({'updatedAt': -1})
       //.skip(desde)
       //.limit(6)
       .exec((err, contratos) => {

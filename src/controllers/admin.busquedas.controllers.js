@@ -59,6 +59,7 @@ module.exports = {
     }
 
     promesa.then((data) => {
+      console.log(data)
       res.status(200).json({
         ok: true,
         [tabla]: data,
@@ -76,8 +77,9 @@ function buscarInmuebles(busqueda, expresionRegular, auth, rol, desde) {
       .or([{ estado: expresionRegular }, { nombre: expresionRegular }])
         .populate("usuario", "nombre apellido correo")
         .skip(desde)
-        .limit(6).
-        exec((err, inmuebles) => {
+        .limit(6)
+        .sort({'updatedAt': -1})
+        .exec((err, inmuebles) => {
           if (err) {
             reject("Error al cargar Inmuebles", err);
           } else {
@@ -101,6 +103,7 @@ function buscarVisitas(busqueda, expresionRegular, auth, desde) {
         .populate("inmueble", "nombre descripcion tipo direccion precioalquiler")
         .skip(desde)
         .limit(6)
+        .sort({'updatedAt': -1})
         .exec((err, visitas) => {
           if (err) {
             reject("Error al cargar Visitas", err);
@@ -124,6 +127,7 @@ function buscarVisitasArrendatario(busqueda, expresionRegular, auth, desde) {
         .populate("inmueble", "nombre descripcion tipo direccion precioalquiler")
         .skip(desde)
         .limit(6)
+        .sort({'updatedAt': -1})
         .exec((err, visitas) => {
           if (err) {
             reject("Error al cargar Visitas", err);
@@ -137,12 +141,18 @@ function buscarVisitasArrendatario(busqueda, expresionRegular, auth, desde) {
 function buscarUsuariosArrendadores(busqueda, expresionRegular, desde) {
 
   return new Promise((resolve, reject) => {
-    
+    console.log(busqueda)
     usuarioModel.find({rol: { $in: 'ARRENDADOR' }}, "correo nombre apellido movil estado rol imagen")
-      .or([{ correo: expresionRegular }, { nombre: expresionRegular }, { apellido: expresionRegular }, { estado: expresionRegular }, { rol: expresionRegular }])
+    .or({ estado: busqueda})
+    .or({ correo: {$in: busqueda} })
+    .or({ nombre: {$in: expresionRegular} })
+    .or({ apellido: {$in: expresionRegular} })
+    .sort({'updatedAt': -1})
+    
       .skip(desde)
       .limit(6)
       .exec((err, usuarios) => {
+     
         if (err) {
           reject("Error al cargar los usuarios", err);
         } else {
@@ -156,9 +166,10 @@ function buscarUsuariosArrendatarios(busqueda, expresionRegular, desde) {
 
   return new Promise((resolve, reject) => {
     usuarioModel.find({rol: { $in: 'ARRENDATARIO' }}, "correo nombre apellido movil estado rol imagen")
-      .or([{ correo: expresionRegular }, { nombre: expresionRegular }, { apellido: expresionRegular }, { estado: expresionRegular }, { rol: expresionRegular }])
+      .or([{ correo: busqueda }, { nombre: expresionRegular }, { apellido: expresionRegular }, { estado: {$in: busqueda}}, { rol: {$in: expresionRegular} }])
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, usuarios) => {
         if (err) {
           reject("Error al cargar los usuarios", err);
@@ -172,6 +183,7 @@ function buscarUsuariosArrendatarios(busqueda, expresionRegular, desde) {
 function buscarServicios(busqueda, expresionRegular ) {
   return new Promise((resolve, reject) => {
     servicioModel.find({ nombre: expresionRegular })
+    .sort({'updatedAt': -1})
     .exec((err, servicios) => {
         if (err) {
           reject("Error al cargar Servicios", err);
@@ -189,6 +201,7 @@ function buscarContratos(busqueda, expresionRegular, auth, desde) {
       .populate('inmueble', " tipo")
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, contratos) => {
         if (err) {
           reject("Error al cargar Contratos", err);
@@ -206,6 +219,7 @@ function buscarContratosArrendatario(busqueda, expresionRegular, auth, desde) {
     .or([{ nombrecontrato: expresionRegular }])
     .skip(desde)
     .limit(6)
+    .sort({'updatedAt': -1})
     .exec((err, contratos) => {
         if (err) {
           reject("Error al cargar Contratos", err);

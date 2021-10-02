@@ -10,6 +10,7 @@ module.exports = {
         servicioModel.find({})
           .skip(desde)
           .limit(6)
+          .sort({'updatedAt': -1})
           .exec((err, servicios) => {
             if (err) {
               return res.status(500).json({

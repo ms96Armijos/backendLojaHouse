@@ -14,6 +14,7 @@ module.exports = {
         .populate('inmueble')
         .skip(desde)
         .limit(6)
+        .sort({'updatedAt': -1})
         .exec(async(err, contratos) => {
           if (err) {
             return res.status(500).json({
@@ -53,6 +54,7 @@ module.exports = {
       .populate('inmueble')
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec(async(err, contratos) => {
         if (err) {
           return res.status(500).json({

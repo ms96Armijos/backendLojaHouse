@@ -22,7 +22,7 @@ const staticOptions = {
 app.use('/public', express.static(path.join(__dirname, 'public'), staticOptions));
 
 // create a write stream (in append mode)
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+//var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
 
 //CORS para permitir la comunicación entre varios servidores
 app.use(cors());

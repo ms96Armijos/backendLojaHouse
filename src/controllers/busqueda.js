@@ -238,9 +238,11 @@ module.exports= {
     }
     
     function buscarUsuarios(busqueda, expresionRegular) {
+    
             return new Promise((resolve, reject) => {
               usuarioModel.find({}, "correo nombre apellido movil estado rol imagen")
                 .or([{ correo: expresionRegular }, { nombre: expresionRegular }, { apellido: expresionRegular }, { estado: expresionRegular }, { rol: expresionRegular }])
+                .sort({'updatedAt': -1})
                 .exec((err, usuarios) => {
                   if (err) {
                     reject("Error al cargar los usuarios", err);
@@ -254,6 +256,7 @@ module.exports= {
     function buscarServicios(busqueda, expresionRegular, auth) {
       return new Promise((resolve, reject) => {
         servicioModel.find({ nombre: expresionRegular})
+        .sort({'updatedAt': -1})
           .exec((err, servicios) => {
             if (err) {
               reject("Error al cargar Servicios", err);
@@ -270,6 +273,7 @@ module.exports= {
         .or([{ nombrecontrato: expresionRegular }, {estado: expresionRegular}])
         .populate('usuarioarrendatario', " nombre")
       .populate('inmueble', " tipo")
+      .sort({'updatedAt': -1})
           .exec((err, contratos) => { 
             if (err) {
               reject("Error al cargar Contratos", err);
@@ -284,6 +288,7 @@ module.exports= {
       return new Promise((resolve, reject) => {
         contratoModel.find({ usuarioarrendatario: auth})
         .or([{ nombrecontrato: expresionRegular }, {estado: expresionRegular}])
+        .sort({'updatedAt': -1})
           .exec((err, contratos) => { 
             if (err) {
               reject("Error al cargar Contratos", err);
@@ -311,6 +316,7 @@ module.exports= {
         .populate('usuario', 'nombre correo')
         .and([{ estado: { $ne : 'ELIMINADO'}}, { publicado: { $ne : 'PRIVADO'}}])
         .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gte : primerPrecio , $lte : segundoPrecio}}])
+        .sort({'updatedAt': -1})
         .exec((err, inmuebles) => {
           console.log(inmuebles)
           if (err) {
@@ -331,6 +337,7 @@ module.exports= {
         .populate('usuario', 'nombre correo')
         .and([{ estado: { $ne : 'ELIMINADO'}}, { publicado: { $ne : 'PRIVADO'}}])
         .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $lte : segundoPrecio}}])
+        .sort({'updatedAt': -1})
         .exec((err, inmuebles) => {
           console.log(inmuebles)
           console.log(inmuebles)
@@ -353,6 +360,7 @@ module.exports= {
        .populate('usuario', 'nombre correo')
        .and([{ estado: { $ne : 'ELIMINADO'}}, { publicado: { $ne : 'PRIVADO'}}])
        .and([{ tipo: expresionRegularTipoInmueble }, { barrio: expresionRegularUbicacion }, { precioalquiler: { $gt : primerPrecio}}])
+       .sort({'updatedAt': -1})
        .exec((err, inmuebles) => {
          console.log(inmuebles)
          console.log(inmuebles)
@@ -381,6 +389,7 @@ module.exports= {
           .or([{ estado: expresionRegular }])
           .skip(desde)
           .limit(6)
+          .sort({'updatedAt': -1})
           .exec((err, mensajes) => {
             if (err) {
               reject("Error al cargar los mensajes", err);

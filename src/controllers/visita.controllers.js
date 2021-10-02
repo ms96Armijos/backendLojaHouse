@@ -25,6 +25,7 @@ module.exports = {
         .populate('inmueble')
         .skip(desde)
         .limit(5)
+        .sort({'updatedAt': -1})
         .exec((err, visitas) => {
           if (err) {
             return res.status(500).json({
@@ -106,6 +107,7 @@ module.exports = {
         .populate('inmueble')
         .skip(desde)
         .limit(5)
+        .sort({'updatedAt': -1})
         .exec((err, visitas) => {
           if (err) {
             return res.status(500).json({
@@ -426,6 +428,7 @@ module.exports = {
       .populate('inmueble')
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, visitas) => {
         if (err) {
           return res.status(500).json({
@@ -477,6 +480,7 @@ module.exports = {
       .populate('inmueble')
       //.skip(desde)
       //.limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, visitas) => {
         if (err) {
           return res.status(500).json({
@@ -582,6 +586,7 @@ module.exports = {
        ]
         })
         .populate('inmueble')
+        .sort({'updatedAt': -1})
         .exec((err, visitas) => {
           if (err) {
             return res.status(500).json({

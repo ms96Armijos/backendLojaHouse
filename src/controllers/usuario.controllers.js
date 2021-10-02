@@ -20,6 +20,7 @@ module.exports = {
       )
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, usuarios) => {
         if (err) {
           return res.status(500).json({
@@ -797,6 +798,7 @@ module.exports = {
       )
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, usuarios) => {
         if (err) {
           return res.status(500).json({
@@ -893,6 +895,7 @@ module.exports = {
         { rol: { $in: rol } },
         "nombre apellido correo imagen movil convencional estado rol"
       )
+      .sort({'updatedAt': -1})
       .exec((err, usuarios) => {
         if (err) {
           return res.status(500).json({

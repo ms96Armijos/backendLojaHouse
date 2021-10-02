@@ -13,6 +13,7 @@ module.exports = {
       .populate('usuario', 'nombre correo rol')
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, inmuebles) => {
         if (err) {
           return res.status(500).json({
@@ -51,6 +52,7 @@ module.exports = {
       .populate('usuario', 'nombre correo rol')
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, inmuebles) => {
         if (err) {
           return res.status(500).json({
@@ -405,6 +407,7 @@ module.exports = {
       .populate('usuario', 'nombre correo')
       .skip(desde)
       .limit(6)
+      .sort({'updatedAt': -1})
       .exec((err, inmuebles) => {
         if (err) {
           return res.status(500).json({
@@ -444,6 +447,7 @@ module.exports = {
       .populate('usuario', 'nombre correo')
       .skip(desde)
       .limit(9)
+      .sort({'updatedAt': -1})
       .exec((err, inmuebles) => {
         if (err) {
           return res.status(500).json({
@@ -480,6 +484,7 @@ module.exports = {
 
       await inmuebleModel.find({ $and: [{ publicado: { $eq: 'PUBLICO' } }, { estado: { $eq: 'DISPONIBLE' } }, { estado: {$ne: 'ELIMINADO'} }] })
         .populate('usuario', 'nombre correo')
+        .sort({'updatedAt': -1})
         .exec((err, inmuebles) => {
           //console.log(inmuebles);
           if (err) {
@@ -504,6 +509,7 @@ module.exports = {
         inmuebleModel.find({ $and: [{ estado: {$in: 'DISPONIBLE'} }, { publicado: {$in: 'PUBLICO'} }, { estado: {$ne: 'ELIMINADO'} }]})
         .or([{ tipo: expresionRegular }, { barrio: expresionRegular },  { direccion: expresionRegular }])
         .populate("usuario", "nombre apellido correo _id")
+        .sort({'updatedAt': -1})
         .exec((err, inmuebles) => {
           if (err) {
             return res.status(500).json({
