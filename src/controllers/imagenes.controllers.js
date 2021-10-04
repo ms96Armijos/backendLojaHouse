@@ -80,11 +80,11 @@ module.exports = {
   }
 
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
-    let path = `../public/${tipo}/${nombreArchivo}`;
+    let pathMover = `./public/${tipo}/${nombreArchivo}`;
 
     
     
-    await archivo.mv(path, async(err) => {
+    await archivo.mv(pathMover, async(err) => {
       
       if (err) {
         return res.status(500).json({
@@ -94,13 +94,13 @@ module.exports = {
         });
       }
       
-      console.log('path: '+path);
+      console.log('pathMover: '+pathMover);
 
-      await cloudinary.v2.uploader.upload(path, { folder : "usuario/"+id}, async(err, imagen) => {
+      await cloudinary.v2.uploader.upload(pathMover, { folder : "usuario/"+id}, async(err, imagen) => {
         const generarImagen = {
           "url": imagen.url,
           "public_id": imagen.public_id,
-          "pathlocal":  path
+          "pathlocal":  pathMover
         };
         console.log('IMG GENERATE: '+generarImagen.public_id)
         nombreArchivo = generarImagen
