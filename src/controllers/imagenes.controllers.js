@@ -84,7 +84,7 @@ module.exports = {
 
     
     
-    await archivo.mv(path, async(err) => {
+    await archivo.mv(path, async(err, res) => {
       
       if (err) {
         return res.status(500).json({
