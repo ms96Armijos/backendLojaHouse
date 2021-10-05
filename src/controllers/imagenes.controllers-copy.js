@@ -116,6 +116,16 @@ router.put("/:tipo/:id", upload.array('imagen', 1), async (req, res) => {
         });
       }
 
+     
+
+
+      for (let i = 0; i < pathsLocal.length; i++) {
+        await fs.unlink(pathsLocal[i])
+        
+      }
+      await fs.rmdir(`./public/usuarios/${id}`);
+
+      
       let urlDeleteImage = usuario.url;
       await cloudinary.v2.uploader.destroy(urlDeleteImage, async(err, result) => {
         if (err) {
@@ -127,12 +137,6 @@ router.put("/:tipo/:id", upload.array('imagen', 1), async (req, res) => {
         }
       });
 
-
-      for (let i = 0; i < pathsLocal.length; i++) {
-        await fs.unlink(pathsLocal[i])
-        
-      }
-      await fs.rmdir(`./public/usuarios/${id}`);
 
       res.status(200).json({
         ok: true,
