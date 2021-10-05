@@ -80,7 +80,8 @@ module.exports = {
   }
 
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
-    let pathMover = `./public/${tipo}/${nombreArchivo}`;
+    
+    let pathMover = path.resolve(__dirname, `../../public/${tipo}/${nombreArchivo}`);
 
     
     
