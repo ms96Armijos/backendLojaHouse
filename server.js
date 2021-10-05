@@ -19,7 +19,7 @@ const staticOptions = {
   setHeaders: setHeadersOnStatic
 }
 
-app.use('/public', express.static(path.join(__dirname, 'public'), staticOptions));
+app.use('/public', express.static(path.join(__dirname, 'public/usuarios'), staticOptions));
 
 // create a write stream (in append mode)
 //var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
