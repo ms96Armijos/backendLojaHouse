@@ -103,25 +103,16 @@ router.put("/:tipo/:id", upload.array('imagen', 1), async (req, res) => {
         pathsInmueble.push(element);
       });
     }
-
-    usuario.imagen = null;
-    usuario.imagen = pathsInmueble;
-
+    let idImage ='';
 
     for (let i = 0; i < usuario.imagen.length; i++) {
     
-      if(usuario.imagen[i]>0){
+      if(usuario.imagen[i] != null){
 
-        const urlDeleteImage = usuario.imagen[1].public_id;
+         idImage = usuario.imagen[i]._id;
+        const urlDeleteImage = usuario.imagen[i].public_id;
         console.log('RUTA: '+urlDeleteImage)
   
-  
-        for (let i = 0; i < usuario.imagen.length; i++) {
-          if(usuario.imagen[i].public_id == urlDeleteImage){
-            elementoEliminado = usuario.imagen.splice(i, 1);
-          }
-  
-        }
   
         await cloudinary.v2.uploader.destroy(urlDeleteImage, async(err, result) => {
           if (err) {
@@ -135,6 +126,17 @@ router.put("/:tipo/:id", upload.array('imagen', 1), async (req, res) => {
 
       }
       
+    }
+
+
+    usuario.imagen = null;
+    usuario.imagen = pathsInmueble;
+
+    for (let i = 0; i < usuario.imagen.length; i++) {
+      if(usuario.imagen[i]._id == idImage){
+        elementoEliminado = usuario.imagen.splice(i, 1);
+      }
+
     }
 
 
