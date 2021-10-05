@@ -52,7 +52,7 @@ const rutaUsuario = require('./src/routes/usuario.routes');
 const rutaVisita = require('./src/routes/visita.routes');
 const rutaContrato = require('./src/routes/contrato.routes');
 const rutaLogin = require('./src/routes/login.routes');
-const rutaImagenes = require('./src/routes/imagenes.routes');
+//const rutaImagenes = require('./src/routes/imagenes.routes');
 const rutaBusqueda = require('./src/routes/busqueda.routes');
 const rutaMensaje = require('./src/routes/mensaje.routes');
 
@@ -81,7 +81,7 @@ app.use('/servicio', rutaServicio);
 app.use('/visita', rutaVisita);
 app.use('/contrato', rutaContrato);
 app.use('/login', rutaLogin);
-app.use('/img', rutaImagenes);
+//app.use('/img', rutaImagenes);
 app.use('/busqueda', rutaBusqueda);
 
 app.use('/mensaje', rutaMensaje);
