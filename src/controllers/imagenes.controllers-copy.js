@@ -125,8 +125,8 @@ router.put("/:tipo/:id", upload.array('imagen', 1), async (req, res) => {
       }
       await fs.rmdir(`./public/usuarios/${id}`);
 
-      
-      let urlDeleteImage = usuario.url;
+
+      let urlDeleteImage = usuario.imagen.url;
       await cloudinary.v2.uploader.destroy(urlDeleteImage, async(err, result) => {
         if (err) {
           return res.status(500).json({
