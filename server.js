@@ -69,7 +69,7 @@ const rutaContratosAdminArrendador = require('./src/routes/admin.contratos.route
 const rutaAdminBusquedas = require('./src/routes/admin.busquedas.routes');
 
 const rutaSubirFotosInmueble = require('./src/controllers/subirfotosinmueble.controllers');
-
+const rutaSubirFotoPerfil = require('./src/controllers/imagenes.controllers-copy');
 
 
 
@@ -97,6 +97,7 @@ app.use('/admin/busqueda', rutaAdminBusquedas);
 
 
 app.use('/fotosinmueble', rutaSubirFotosInmueble);
+app.use('/img', rutaSubirFotoPerfil);
 
 
 
