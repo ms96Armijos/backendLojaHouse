@@ -107,6 +107,37 @@ router.put("/:tipo/:id", upload.array('imagen', 1), async (req, res) => {
     usuario.imagen = null;
     usuario.imagen = pathsInmueble;
 
+
+    for (let i = 0; i < usuario.imagen.length; i++) {
+    
+      if(usuario.imagen[i]>0){
+
+        const urlDeleteImage = usuario.imagen[1].public_id;
+        console.log('RUTA: '+urlDeleteImage)
+  
+  
+        for (let i = 0; i < usuario.imagen.length; i++) {
+          if(usuario.imagen[i].public_id == urlDeleteImage){
+            elementoEliminado = usuario.imagen.splice(i, 1);
+          }
+  
+        }
+  
+        await cloudinary.v2.uploader.destroy(urlDeleteImage, async(err, result) => {
+          if (err) {
+            return res.status(500).json({
+              ok: false,
+              mensaje: "Error al eliminar imágen",
+              errors: err,
+            });
+          }
+        });
+
+      }
+      
+    }
+
+
    await usuario.save( async(err, usuarioGuardado) => {
       if (err) {
         return res.status(400).json({
@@ -126,16 +157,8 @@ router.put("/:tipo/:id", upload.array('imagen', 1), async (req, res) => {
       await fs.rmdir(`./public/usuarios/${id}`);
 
 
-      let urlDeleteImage = usuario.imagen.url;
-      await cloudinary.v2.uploader.destroy(urlDeleteImage, async(err, result) => {
-        if (err) {
-          return res.status(500).json({
-            ok: false,
-            mensaje: "Error al eliminar imágen",
-            errors: err,
-          });
-        }
-      });
+
+    
 
 
       res.status(200).json({
