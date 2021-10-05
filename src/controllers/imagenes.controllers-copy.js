@@ -49,7 +49,7 @@ var upload = multer({
 
 //ACTUALIZA Y ELIMINA, ACA ES PARA PODER ENVIAR LA LISTA DE IMAGENES Q SE CAPTURAN EN EL FRONT
 //AHI ESTA LA OPCION DE ELIMINAR O CARGAR MAS IMAGENES
-router.put("/:tipo/:id", upload.array('imagen', 3), async (req, res) => {
+router.put("/:tipo/:id", upload.array('imagen', 1), async (req, res) => {
   let id = req.params.id;
   const reqFiles = []
   const finalImage = []
