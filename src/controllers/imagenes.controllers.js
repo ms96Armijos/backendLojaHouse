@@ -148,7 +148,7 @@ function subirFotoPorTipo(tipo, id, nombreArchivo, res) {
       //si existe imagen, la borra
       //if (fs.existsSync(pathViejo)) {
         console.log('eliminando ' + pathViejo);
-       await fs.unlinkSync(nombreArchivo.pathlocal);
+        fs.unlinkSync(nombreArchivo.pathlocal);
      // }
      
   
