@@ -116,6 +116,18 @@ router.put("/:tipo/:id", upload.array('imagen', 1), async (req, res) => {
         });
       }
 
+      let urlDeleteImage = usuario.url;
+      await cloudinary.v2.uploader.destroy(urlDeleteImage, async(err, result) => {
+        if (err) {
+          return res.status(500).json({
+            ok: false,
+            mensaje: "Error al eliminar imágen",
+            errors: err,
+          });
+        }
+      });
+
+
       for (let i = 0; i < pathsLocal.length; i++) {
         await fs.unlink(pathsLocal[i])
         
