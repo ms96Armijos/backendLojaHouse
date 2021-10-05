@@ -80,8 +80,7 @@ module.exports = {
   }
 
     //MOVER EL ARCHIVO DEL TEMPORAL A UN PATH ESPECIFICO
-    
-    let pathMover = path.resolve(__dirname, `../../public/${tipo}/${nombreArchivo}`);
+    let pathMover = `./public/${tipo}/${nombreArchivo}`;
 
     
     
@@ -149,7 +148,7 @@ function subirFotoPorTipo(tipo, id, nombreArchivo, res) {
       //si existe imagen, la borra
       //if (fs.existsSync(pathViejo)) {
         console.log('eliminando ' + pathViejo);
-        fs.unlinkSync(nombreArchivo.pathlocal);
+       await fs.unlinkSync(nombreArchivo.pathlocal);
      // }
      
   
@@ -158,7 +157,7 @@ function subirFotoPorTipo(tipo, id, nombreArchivo, res) {
       console.log('nueva foto ' + usuario.imagen);
 
 
-      usuario.save((err, usuarioActualizado) => {
+      await usuario.save((err, usuarioActualizado) => {
 
       
 
