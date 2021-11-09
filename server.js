@@ -55,6 +55,8 @@ const rutaLogin = require('./src/routes/login.routes');
 //const rutaImagenes = require('./src/routes/imagenes.routes');
 const rutaBusqueda = require('./src/routes/busqueda.routes');
 const rutaMensaje = require('./src/routes/mensaje.routes');
+const rutaTipoInmueble = require('./src/routes/tipo.inmueble.routes');
+
 
 
 const rutaEnviarNotificaciones = require('./src/routes/enviar.notificaciones.routes');
@@ -78,6 +80,7 @@ const rutaSubirFotoPerfil = require('./src/controllers/imagenes.controllers-copy
 app.use('/usuario', rutaUsuario);
 app.use('/inmueble', rutaInmueble);
 app.use('/servicio', rutaServicio);
+app.use('/tipoinmueble', rutaTipoInmueble);
 app.use('/visita', rutaVisita);
 app.use('/contrato', rutaContrato);
 app.use('/login', rutaLogin);

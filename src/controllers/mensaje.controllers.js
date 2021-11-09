@@ -20,6 +20,22 @@ module.exports = {
             }
             
             mensajeModel.countDocuments({estado: {$ne: 'ELIMINADO'}}, (err, conteo) => {
+
+
+              /*
+              CALCULANDO PESO DE PERIODICO (ELIMINAR CODIGO)
+              let pesoPorHoja = 0.020;
+              let numHojas = 60;
+              let pesoTotal = 0;
+              let incrementoPesoPorHoja=0.020;
+
+              for (let i = 0; i < numHojas; i++) {
+                pesoTotal = (incrementoPesoPorHoja + (pesoPorHoja*i));
+                if(i%6 == 0){
+                  incrementoPesoPorHoja+=0.02;
+                }
+              }
+              console.log('En '+ numHojas + ' hojas de periódico hay un peso de: '+(pesoTotal+0.02).toFixed(2) +' libras');*/
              
               if (err) {
                 return res.status(500).json({

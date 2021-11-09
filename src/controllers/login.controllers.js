@@ -137,9 +137,11 @@ function obtenerMenu(ROL){
     icono: 'mdi mdi-account-settings-variant',
     submenu: [
       //{ titulo: 'Usuarios', url: '/usuarios' },
-      { titulo: 'Gestión de Servicios', url: '/servicios' }
+      { titulo: 'Gestión de Servicios', url: '/servicios' },
+      { titulo: 'Gestión Tipos de Inmueble', url: '/tipoinmueble' }
     ]
   };
+  
 
   let menuMensajes = {
     titulo: 'Mensajes',

@@ -2,6 +2,7 @@ let express = require("express");
 let app = express();
 
 const { mongo: { inmuebleModel, usuarioModel, visitaModel, servicioModel, contratoModel } } = require('../../databases');
+const { tipoInmuebleModel } = require("../../databases/mongo");
 
 //BUSQUEDAS ESPECIFICAS
 module.exports = {
@@ -193,6 +194,7 @@ function buscarServicios(busqueda, expresionRegular ) {
       });
   });
 }
+
 
 function buscarContratos(busqueda, expresionRegular, auth, desde) {
   return new Promise((resolve, reject) => {

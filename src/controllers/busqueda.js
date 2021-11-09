@@ -1,7 +1,7 @@
 let express = require("express");
 let app = express();
 
-const {mongo: {inmuebleModel, usuarioModel, visitaModel, servicioModel, contratoModel, mensajeModel } } = require('../../databases');
+const {mongo: {inmuebleModel, usuarioModel, visitaModel, servicioModel, contratoModel, mensajeModel, tipoInmuebleModel } } = require('../../databases');
 
 //BUSQUEDAS ESPECIFICAS
 module.exports= {
@@ -29,6 +29,11 @@ module.exports= {
           case "servicios":
             promesa = buscarServicios(busqueda, expresionRegular, auth);
             break;
+
+            case "tipoinmueble":
+              promesa = buscarTipoInmueble(busqueda, expresionRegular, auth);
+              break;
+
       
           case "contratos":
             promesa = buscarContratos(busqueda, expresionRegular, auth);
@@ -46,7 +51,7 @@ module.exports= {
           default:
             return res.status(400).json({
               ok: false,
-              mensaje: "Los tipos de búsqueda son: usuarios, visitas, inmuebles, servicios",
+              mensaje: "Los tipos de búsqueda son: usuarios, visitas, inmuebles, servicios, tipoinmueble",
               error: { message: "Tipo de colección no válida" },
             });
         }
@@ -69,6 +74,7 @@ module.exports= {
           buscarServicios(busqueda, expresionRegular, auth),
           buscarContratos(busqueda, expresionRegular, auth),
           buscarVisitasArrendatario(busqueda, expresionRegular, auth),
+          buscarTipoInmueble(busqueda, expresionRegular, auth),
         ])
           .then((respuestas) => {
             res.status(200).json({
@@ -76,9 +82,10 @@ module.exports= {
               inmuebles: respuestas[0],
               visitas: respuestas[1],
               usuarios: respuestas[2],
-              servicios: respuesta[3],
-              contratos: respuesta[4],
-              visitasarrendatario: respuesta[5],
+              servicios: respuestas[3],
+              contratos: respuestas[4],
+              visitasarrendatario: respuestas[5],
+              tipoinmueble: respuestas[6],
             });
           })
           .catch((err)=>{
@@ -262,6 +269,20 @@ module.exports= {
               reject("Error al cargar Servicios", err);
             } else {
               resolve(servicios);
+            }
+          });
+      });
+    }
+
+    function buscarTipoInmueble(busqueda, expresionRegular, auth) {
+      return new Promise((resolve, reject) => {
+        tipoInmuebleModel.find({ nombre: expresionRegular})
+        .sort({'updatedAt': -1})
+          .exec((err, tipoinmueble) => {
+            if (err) {
+              reject("Error al cargar el tipo de inmueble", err);
+            } else {
+              resolve(tipoinmueble);
             }
           });
       });
