@@ -29,12 +29,7 @@ module.exports= {
           case "servicios":
             promesa = buscarServicios(busqueda, expresionRegular, auth);
             break;
-
-            case "tipoinmueble":
-              promesa = buscarTipoInmueble(busqueda, expresionRegular, auth);
-              break;
-
-      
+            
           case "contratos":
             promesa = buscarContratos(busqueda, expresionRegular, auth);
             break;
@@ -274,19 +269,7 @@ module.exports= {
       });
     }
 
-    function buscarTipoInmueble(busqueda, expresionRegular, auth) {
-      return new Promise((resolve, reject) => {
-        tipoInmuebleModel.find({ nombre: expresionRegular})
-        .sort({'updatedAt': -1})
-          .exec((err, tipoinmueble) => {
-            if (err) {
-              reject("Error al cargar el tipo de inmueble", err);
-            } else {
-              resolve(tipoinmueble);
-            }
-          });
-      });
-    }
+
     
     function buscarContratos(busqueda, expresionRegular, auth) {
       return new Promise((resolve, reject) => {
