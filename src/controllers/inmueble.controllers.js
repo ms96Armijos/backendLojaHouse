@@ -1,4 +1,4 @@
-const { mongo: { inmuebleModel } } = require('../../databases');
+const { mongo: { inmuebleModel, contratoModel } } = require('../../databases');
 
 
 module.exports = {
@@ -260,92 +260,46 @@ module.exports = {
     });
   },
 
-  eliminarInmueble: async (req, res) => {
-    let id = req.params.id;
-    const { estado, publicado } = req.body;
-
-
-    await inmuebleModel.findById(id, async(err, inmueble) => {
-      if (err) {
-        return res.status(500).json({
-          ok: false,
-          mensaje: "Error al buscar inmueble",
-          errors: err,
-        });
-      }
-
-      if (!inmueble) {
-        return res.status(400).json({
-          ok: false,
-          mensaje: "El inmueble con el id: " + id + " no existe",
-          errors: { message: "No existe un inmueble con ese ID" },
-        });
-      }
-
-      inmueble.estado = estado;
-      inmueble.publicado = publicado;
-
-
-       inmueble.save((err, inmuebleGuardado) => {
-        if (err) {
-          return res.status(400).json({
-            ok: false,
-            mensaje: "Error al eliminar inmueble",
-            errors: err,
-          });
-        }
-
-        res.status(200).json({
-          ok: true,
-          inmueble: inmuebleGuardado,
-          mensaje: "Se ha eliminado el inmueble correctamente"
-        });
-      });
-    });
-  },
-
-  eliminarInmuebleDesdeElAdministrador: async(req, res) => {
-    let id = req.params.id;
-    const { estado, publicado } = req.body;
   
-    await inmuebleModel.findById(id, async(err, inmueble) => {
+
+  eliminarInmuebleArrendador: async(req, res) => {
+    let id = req.params.id;
+  
+    let contrato = await contratoModel.find({ inmueble: { $in: id } });
+
+    if(contrato && contrato.length>0){
+      return res.status(500).json({
+        ok: false,
+        mensaje: "No se puede eliminar el inmueble",
+      });
+    }
+    
+    inmuebleModel.findByIdAndDelete(id, (err, inmuebleBorrado) => {
       if (err) {
         return res.status(500).json({
           ok: false,
-          mensaje: "Error al buscar inmueble",
+          mensaje: "Error al borrar el inmueble",
           errors: err,
         });
       }
-
-      if (!inmueble) {
+  
+      if (!inmuebleBorrado) {
         return res.status(400).json({
           ok: false,
-          mensaje: "El inmueble con el id: " + id + " no existe",
+          mensaje: "No existe un inmueble con ese ID",
           errors: { message: "No existe un inmueble con ese ID" },
         });
       }
-
-      inmueble.estado = estado;
-      inmueble.publicado = publicado;
-
-
-       inmueble.save((err, inmuebleGuardado) => {
-        if (err) {
-          return res.status(400).json({
-            ok: false,
-            mensaje: "Error al eliminar inmueble",
-            errors: err,
-          });
-        }
-
-        res.status(200).json({
-          ok: true,
-          inmueble: inmuebleGuardado,
-          mensaje: "Se ha eliminado el inmueble correctamente"
-        });
+  
+      res.status(200).json({
+        ok: true,
+        servicio: inmuebleBorrado,
       });
     });
+    
+    /**/
   },
+
 
   desactivarinmueble: async (req, res) => {
     let id = req.params.id;

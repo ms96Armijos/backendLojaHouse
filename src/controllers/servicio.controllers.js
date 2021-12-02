@@ -162,7 +162,7 @@ module.exports = {
     eliminarServicios: (req, res) => {
         let id = req.params.id;
       
-        servicioModel.findByIdAndRemove(id, (err, servicioBorrado) => {
+        servicioModel.findOneAndDelete(id, (err, servicioBorrado) => {
           if (err) {
             return res.status(500).json({
               ok: false,

@@ -159,11 +159,7 @@ module.exports = {
     .populate('usuario', 'nombre correo')
       .exec((err, inmuebleEncontrado) => {
     
-
-
-
        usuarioModel.findById(usuarioarrendatario, (err, usuarioEncontrado) => {
-
 
                 //DESDE AQÍ EMPIEZA LA GENERACIÓN DE LA CONTRASEÑA Y EL ENVÍO DEL CORREO ELECTRÓNICO
                 const transporter = nodemailer.createTransport(
@@ -222,9 +218,6 @@ module.exports = {
           errors: err,
         });
       }
-
- 
-
 
 
        visita.save((err, visitaGuardado) => {
@@ -322,7 +315,7 @@ module.exports = {
     });
   },
 
-  eliminarVisita: async(req, res) => {
+  /*eliminarVisita: async(req, res) => {
     let id = req.params.id;
     //el estado debe recibirse como eliminado
     const { estado } = req.body;
@@ -373,7 +366,7 @@ module.exports = {
       }
     });
 
-  },
+  },*/
 
   aceptarVisita: async (req, res) => {
     let id = req.params.id;
@@ -572,9 +565,7 @@ module.exports = {
       })
   },
 
-
    obtenerSolicitudVisitasPendientes: async (req, res, next) => {
-
 
     const inmueble = await inmuebleModel.find({ usuario: { $in: req.usuario._id } });
 
@@ -623,7 +614,7 @@ module.exports = {
   eliminarVisitaArrendatario: (req, res) => {
     let id = req.params.id;
   
-    visitaModel.findByIdAndRemove(id, (err, visitaBorrada) => {
+    visitaModel.findByIdAndDelete(id, (err, visitaBorrada) => {
       if (err) {
         return res.status(500).json({
           ok: false,
@@ -636,9 +627,6 @@ module.exports = {
       .populate('usuario', 'nombre correo')
       .exec((err, inmuebleEncontrado) => {
         
-
-        
-                //DESDE AQÍ EMPIEZA LA GENERACIÓN DE LA CONTRASEÑA Y EL ENVÍO DEL CORREO ELECTRÓNICO
                 const transporter = nodemailer.createTransport(
                   sendgridTransport({
                     auth: {

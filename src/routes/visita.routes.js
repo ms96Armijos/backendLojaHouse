@@ -8,7 +8,6 @@ const {
     obtenerVisitas, 
     crearVisita, 
     actualizarVisita, 
-    eliminarVisita,
     aceptarVisita,
     obtenerVisitasSolicitadas,
     obtenerVisitaEspecificaArrendatario,
@@ -32,7 +31,7 @@ router.post('/crearvisita', mdwVerificarToken.verificaToken, crearVisita);
 router.put('/actualizarvisita/:id', mdwVerificarToken.verificaToken, actualizarVisita);
 
 ///he cambiado este método eliminar
-router.put('/eliminarvisita/:id', mdwVerificarToken.verificaToken, eliminarVisitaArrendatario);
+router.delete('/eliminarvisita/:id', mdwVerificarToken.verificaToken, eliminarVisitaArrendatario);
 
 //RUTAS DEL USUARIO ARRENDADOR PARA ACEPTAR LAS VISITAS
 router.put('/arrendador/aceptarvisita/:id', aceptarVisita);

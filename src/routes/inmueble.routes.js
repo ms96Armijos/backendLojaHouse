@@ -8,13 +8,12 @@ const {
     obtenerInmueblePublico,
     crearInmueble, 
     actualizarInmueble, 
-    eliminarInmueble,
+    eliminarInmuebleArrendador,
     desactivarinmueble,
     inmueblesPublicadosPorArrendador,
     inmueblesPublicos,
     inmueblesPublicosMovil,
     obtenerinmueblesarrendador,
-    eliminarInmuebleDesdeElAdministrador,
     buscaInmueblePublicoMovil,
     actualizarFotosInmueble
 } = require('../controllers/inmueble.controllers');
@@ -28,7 +27,7 @@ router.get('/obtenerinmueble/:id', mdwVerificarToken.verificaToken, obtenerInmue
 router.get('/obtenerinmueble/publico/:id', obtenerInmueblePublico);
 router.post('/crearinmueble', mdwVerificarToken.verificaToken, crearInmueble);
 router.put('/actualizarinmueble/:id', mdwVerificarToken.verificaToken, actualizarInmueble);
-router.put('/eliminarinmueble/:id', mdwVerificarToken.verificaToken, eliminarInmueble);
+router.delete('/eliminarinmueble/:id', mdwVerificarToken.verificaToken, eliminarInmuebleArrendador);
 
 //ACCIONES PARA PULICAR Y DESACTIVAR UN INMUEBLE
 router.put('/desactivarinmueble/:id', mdwVerificarToken.verificaToken, desactivarinmueble);
@@ -44,6 +43,4 @@ router.get('/buscar/:busqueda', buscaInmueblePublicoMovil);
 //RUTA DEL ARRENDADOR
 router.get('/obtenerinmuebles/arrendador/:desde', mdwVerificarToken.verificaToken, obtenerinmueblesarrendador);
 
-//ELIMINAR INMUEBLE DESDE EL ADMINISITRADOR
-router.put('/eliminar-inmueble/admin/:id', mdwVerificarToken.verificaToken, eliminarInmuebleDesdeElAdministrador);
 module.exports = router;
